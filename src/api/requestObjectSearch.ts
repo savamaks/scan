@@ -1,0 +1,34 @@
+import { createAsyncThunk } from "@reduxjs/toolkit";
+
+export const requestObjectSearch = async ({body, accessToken}:any) => {
+    try {
+        const res = await fetch("https://gateway.scan-interfax.ru/api/v1/objectsearch", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify(body),
+        });
+        const data = await res.json();
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+// export const requestObjectSearch = createAsyncThunk(
+//     'requestObjectSearch',
+//     async({body, accessToken}:any)=>{
+//         const res = await fetch("https://gateway.scan-interfax.ru/api/v1/objectsearch", {
+//             method: "POST",
+//             headers: {
+//                 "Content-Type": "application/json",
+//                 Authorization: `Bearer ${accessToken}`,
+//             },
+//             body: JSON.stringify(body),
+//         });
+//         const data = await res.json();
+//         return data;
+//     }
+// )

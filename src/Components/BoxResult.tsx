@@ -1,0 +1,173 @@
+import styled from "styled-components";
+import { ResultType } from "../type";
+import { useResize } from "../Hooks/useResize";
+import SliderItem from "./CarouselFolder/SliderItem";
+import Slider from "./CarouselFolder/Slider";
+import ArrowLeft from "./CarouselFolder/ArrowLeft";
+import ArrowRight from "./CarouselFolder/ArrowRight";
+import { useEffect } from "react";
+import { useAppSelector } from "../Reducer/store";
+import Loader from "./Loaders/Loader";
+
+const Container = styled.div`
+    border-radius: 10px;
+    border: 2px solid #029491;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    margin: 0 10px 0 10px;
+`;
+const MainBox = styled.div`
+    background: #029491;
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+    padding: 17px 28px;
+`;
+const Title = styled.p`
+    color: #fff;
+    font-family: Inter;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.4px;
+`;
+const Box = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 26px;
+    padding: 18px;
+    /* border-right: 1px solid #949494; */
+`;
+const Text = styled.div`
+    color: #000;
+    font-family: Inter;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.36px;
+    white-space: nowrap;
+`;
+const Line = styled.div`
+    background: #949494;
+    width: 2px;
+    height: 124px;
+    opacity: 0.4;
+`;
+
+const Block = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+const BoxResult = () => {
+    const { width } = useResize(); //ширина окна
+    const { loadingHistogram, arrSearchHistogram } = useAppSelector((state) => state.appSlice);
+    if (width > 1440) {
+    }
+    const countCell = Math.round(width / 127) - 4; //колличество ячеек
+    // const arrT = [
+    //     { date: "2022-08-01T03:00:00+03:00", value: 3 },
+
+    //     { date: "2023-01-01T03:00:00+03:00", value: 5 },
+
+    //     { date: "2022-09-01T03:00:00+03:00", value: 53 },
+
+    //     { date: "2022-10-01T03:00:00+03:00", value: 77 },
+
+    //     { date: "2022-11-01T03:00:00+03:00", value: 69 },
+
+    //     { date: "2022-12-01T03:00:00+03:00", value: 235 },
+    // ];
+    // console.log(typeof +(arr.data[0].data[0].date.slice(0,4)+arr.data[0].data[0].date.slice(5,7)));
+    // console.log(arrT.sort((a: any, b: any) => +(a.date.slice(0,4)+a.date.slice(5,7)) - +(b.date.slice(0,7)+a.date.slice(5,7))));
+
+    return (
+        <Slider count={countCell} lengthArr={arrSearchHistogram.length === 0 && 2}>
+            <ArrowLeft>
+                <img src={"images/leftArrow.svg"} alt="arrow-left" />
+            </ArrowLeft>
+
+            <Container>
+                <MainBox>
+                    <Title>Период</Title>
+                    <Title>Всего</Title>
+                    <Title>Риски</Title>
+                </MainBox>
+                {loadingHistogram == "true" ? (
+                    <SliderItem>
+                        {arrSearchHistogram.data[0].data.map((el: ResultType, index: number) => {
+                            const date = el.date.slice(0, 10);
+                            return (
+                                <Block key={index}>
+                                    <Box>
+                                        <Text>{date}</Text>
+                                        <Text>{el.value}</Text>
+                                        <Text>{arrSearchHistogram.data[1].data[index].value}</Text>
+                                    </Box>
+                                    {index !== arrSearchHistogram.data[0].data.length - 1 && <Line></Line>}
+                                </Block>
+                            );
+                        })}
+                    </SliderItem>
+                ) : (
+                    <div style={{ width: "500px", textAlign: "center" }}>
+                        <Loader />
+                    </div>
+                )}
+            </Container>
+
+            <ArrowRight>
+                <img src={"images/rightArrow.svg"} alt="arrow-right" />
+            </ArrowRight>
+        </Slider>
+    );
+};
+
+export default BoxResult;
+
+// {/* <Slider lengthArr={arrCarousel.length} count={3}>
+//             <ArrowLeft>
+//                 <img src={LeftArrow} alt="arrow-left" />
+//             </ArrowLeft>
+//             <SliderItem>
+//                 {arrCarousel.map((el: any, index: number) => {
+//                     return <CarouselItem key={index} image={el.image} text={el.text} />;
+//                 })}
+//             </SliderItem>
+//             <ArrowRight>
+//                 <img src={RightArrow} alt="arrow-left" />
+//             </ArrowRight>
+//         </Slider> */}
+
+//  <Arrow onClick={clickArrowLeft}>
+//     <img src={LeftArrow} alt="arrow-left" />
+// </Arrow>
+// <Container>
+//     <MainBox>
+//         <Title>Период</Title>
+//         <Title>Всего</Title>
+//         <Title>Риски</Title>
+//     </MainBox>
+//     {arr.map((el: ResultType, index: number) => {
+//         if (countSlider < index) return;
+//         if (index >= countSlider - countCell && index <= countSlider && countSlider !== 0) {
+//             return (
+//                 <Block key={index}>
+//                     <Box>
+//                         <Text>{el.date}</Text>
+//                         <Text>{el.total}</Text>
+//                         <Text>{el.risks}</Text>
+//                     </Box>
+//                     {countSlider > index && <Line></Line>}
+//                 </Block>
+//             );
+//         }
+//     })}
+// </Container>
+// <Arrow onClick={clickArrowRight}>
+//     <img src={RightArrow} alt="arrow-right" />
+// </Arrow>
