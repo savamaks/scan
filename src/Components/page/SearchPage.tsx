@@ -248,7 +248,6 @@ const SearchPage = (): JSX.Element => {
         button,
         checkedArr,
         resultLogIn,
-        
         limitLoadingDocument,
     } = useAppSelector((state) => state.appSlice);
     const dispatch = useAppDispatch();

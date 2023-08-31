@@ -6,7 +6,6 @@ import { requestDocument } from "../api/requestDocument";
 import { requestLogin } from "../api/requestLogin";
 import { requestInfo } from "../api/requstInfo";
 
-
 const initialState: TypeInitialState = {
     button: true,
     activeBurger: false,
@@ -19,8 +18,8 @@ const initialState: TypeInitialState = {
     countSlider: 5,
     eventFiltersInfo: {},
     checkedArr: [],
-    arrSearchHistogram: [],
-    arrObjectSearch: { empty: true },
+    arrSearchHistogram: { data: [] },
+    arrObjectSearch: { items: [] },
     limitLoadingDocument: 10,
     countLoadingDocument: 0,
     arrDocument: [],
@@ -30,7 +29,12 @@ const initialState: TypeInitialState = {
     loadingDocument: "",
     loadingObjectSearch: "",
     statusError: "",
-    resultLogIn: {},
+    resultLogIn: {
+        accessToken: "",
+        expire: "",
+        errorCode: "",
+        message: "",
+    },
 };
 
 const appSlice = createSlice({
@@ -48,8 +52,14 @@ const appSlice = createSlice({
             state.countSlider = action.payload;
         },
         removeToken(state: any) {
-            state.resultLogIn = {};
-            state.loadingLogIn =''
+            state.resultLogIn = {
+                accessToken: "",
+                expire: "",
+                errorCode: "",
+                message: "",
+            };
+            state.loadingLogIn = "";
+            state.loadingInfo = "";
         },
         changeBooleanName(state: any, action) {
             state[action.payload.name] = action.payload.value;
@@ -71,18 +81,17 @@ const appSlice = createSlice({
             state.loadingHistogram = "";
         },
         clearArr(state) {
-            state.arrSearchHistogram = [];
-            state.arrObjectSearch = [];
+            state.arrSearchHistogram = { data: [] };
+            state.arrObjectSearch = { items: [] };
             state.arrDocument = [];
             state.countLoadingDocument = 0;
             state.loadingHistogram = "";
             state.loadingDocument = "";
             state.loadingObjectSearch = "";
         },
-        addArrObjectSearch(state,action){
+        addArrObjectSearch(state, action) {
             state.arrObjectSearch = action.payload;
-
-        }
+        },
     },
     extraReducers(builder) {
         //requestLogin
@@ -90,7 +99,11 @@ const appSlice = createSlice({
             state.loadingLogIn = "loading";
         }),
             builder.addCase(requestLogin.fulfilled, (state, action) => {
-                state.loadingLogIn = "true";
+                if (action.payload.accessToken === undefined) {
+                    state.loadingLogIn = "";
+                } else {
+                    state.loadingLogIn = "true";
+                }
                 state.resultLogIn = action.payload;
             }),
             builder.addCase(requestLogin.rejected, (state) => {

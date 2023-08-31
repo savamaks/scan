@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "../../Reducer/store";
-import { changeBoolean, changeBooleanName, changeToken } from "../../Reducer/appSlice";
+import { changeBoolean, changeBooleanName } from "../../Reducer/appSlice";
 import { useEffect, useState } from "react";
 import { useResize } from "../../Hooks/useResize";
 import ButtonCustom from "../ButtonCustom";

@@ -145,6 +145,7 @@ const Rate = ({ title, text, price, sale, textPrice, li, background, color, imag
                 </ButtonCustom>
             </Block>
         </Container>
+        
     );
 };
 

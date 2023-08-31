@@ -42,7 +42,62 @@ export type TypeEventFiltersInfo = {
     usedCompanyCount?: string;
     companyLimit?: string;
 };
-
+export type TypeData = {
+    date: string;
+    value: number;
+};
+type TypeDataHistogram = {
+    data: Array<TypeData>;
+    histogramType: string;
+};
+type TypeArrSearchHistogram = {
+    data: Array<TypeDataHistogram>;
+};
+type TypeItemsObjectSearch = {
+    encodedId: string;
+    influence: number;
+    similarCount: number;
+};
+type TypeMappingArrObject = {
+    inn: string;
+    entityIds: Array<string>;
+};
+type TypeArrObjectSearch = {
+    items: Array<TypeItemsObjectSearch>;
+    mappings?: Array<TypeMappingArrObject>;
+};
+type TypeAttributes = {
+    isTechNews: boolean;
+    isAnnouncement: boolean;
+    isDigest: boolean;
+    isSpeechRecognition: boolean;
+    influence: number;
+    wordCount: number;
+};
+type TypeOkItems = {
+    id: string;
+    url: string;
+    issueDate: string;
+    source: {
+        name: string;
+    };
+    title: {
+        text: string;
+    };
+    content: {
+        markup: string;
+    };
+    attributes: TypeAttributes;
+};
+export type TypeResultLogIn = {
+    accessToken: string;
+    expire: string;
+    errorCode: string;
+    message: string;
+};
+export type TypeItemsArrDocument = {
+    ok: TypeOkItems;
+};
 export type TypeInitialState = {
     button: boolean;
     activeBurger: boolean;
@@ -55,17 +110,17 @@ export type TypeInitialState = {
     countSlider: number;
     eventFiltersInfo: TypeEventFiltersInfo;
     checkedArr: Array<string>;
-    arrSearchHistogram: any;
-    arrObjectSearch: any;
+    arrSearchHistogram: TypeArrSearchHistogram;
+    arrObjectSearch: TypeArrObjectSearch;
     limitLoadingDocument: number;
     countLoadingDocument: number;
-    arrDocument: any;
+    arrDocument: Array<TypeItemsArrDocument>;
     loadingHistogram: string;
     statusError: string;
     loadingDocument: string;
     loadingObjectSearch: string;
     loadingLogIn: string;
-    resultLogIn: any;
+    resultLogIn: TypeResultLogIn;
     loadingInfo: string;
 };
 export type TypeCheckedAction = {

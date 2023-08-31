@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ResultType } from "../type";
+import { TypeData } from "../type";
 import { useResize } from "../Hooks/useResize";
 import SliderItem from "./CarouselFolder/SliderItem";
 import Slider from "./CarouselFolder/Slider";
@@ -69,24 +69,9 @@ const BoxResult = () => {
     if (width > 1440) {
     }
     const countCell = Math.round(width / 127) - 4; //колличество ячеек
-    // const arrT = [
-    //     { date: "2022-08-01T03:00:00+03:00", value: 3 },
-
-    //     { date: "2023-01-01T03:00:00+03:00", value: 5 },
-
-    //     { date: "2022-09-01T03:00:00+03:00", value: 53 },
-
-    //     { date: "2022-10-01T03:00:00+03:00", value: 77 },
-
-    //     { date: "2022-11-01T03:00:00+03:00", value: 69 },
-
-    //     { date: "2022-12-01T03:00:00+03:00", value: 235 },
-    // ];
-    // console.log(typeof +(arr.data[0].data[0].date.slice(0,4)+arr.data[0].data[0].date.slice(5,7)));
-    // console.log(arrT.sort((a: any, b: any) => +(a.date.slice(0,4)+a.date.slice(5,7)) - +(b.date.slice(0,7)+a.date.slice(5,7))));
 
     return (
-        <Slider count={countCell} lengthArr={arrSearchHistogram.length === 0 && 2}>
+        <Slider count={countCell} lengthArr={arrSearchHistogram.data.length === 0 ? 10:arrSearchHistogram.data[0].data.length}>
             <ArrowLeft>
                 <img src={"images/leftArrow.svg"} alt="arrow-left" />
             </ArrowLeft>
@@ -99,7 +84,7 @@ const BoxResult = () => {
                 </MainBox>
                 {loadingHistogram == "true" ? (
                     <SliderItem>
-                        {arrSearchHistogram.data[0].data.map((el: ResultType, index: number) => {
+                        {arrSearchHistogram.data[0].data.map((el: TypeData, index: number) => {
                             const date = el.date.slice(0, 10);
                             return (
                                 <Block key={index}>

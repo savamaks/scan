@@ -54,7 +54,7 @@ const Box = styled.div`
     justify-content: flex-end;
 `;
 const Header = () => {
-    const { loadingLogIn,loadingInfo, activeBurger, eventFiltersInfo, resultLogIn } = useAppSelector((state) => state.appSlice);
+    const { loadingLogIn, loadingInfo, activeBurger, eventFiltersInfo, resultLogIn } = useAppSelector((state) => state.appSlice);
     const dispatch = useAppDispatch();
 
     const clickLogo = () => {
@@ -65,12 +65,11 @@ const Header = () => {
     const { size } = useResize();
 
     useEffect(() => {
-        if (loadingLogIn === "true" ) {
-            console.log('object');
+        if (loadingLogIn ==='true') {
+            console.log("запуск Инфо");
             dispatch(requestInfo(resultLogIn.accessToken));
         }
     }, [loadingLogIn]);
-
 
     return (
         <HeaderContainer position={activeBurger ? "sticky" : "none"} background={activeBurger ? "#029491" : "#FFF"}>
@@ -79,10 +78,10 @@ const Header = () => {
             </Link>
 
             {size && <Navigation />}
-            {loadingLogIn ==='true' && size && (
+            {loadingLogIn === "true"&& resultLogIn.accessToken !== "" && size && (
                 <Container>
                     <div>
-                        {loadingInfo ==='true' ? (
+                        {loadingInfo === "true" ? (
                             <>
                                 <Box>
                                     <Text>Использовано компаний </Text>

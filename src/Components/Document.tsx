@@ -103,13 +103,16 @@ const TextCount = styled.p`
 
 const Document = ({ dateText, website, title, label, image, text, textCount }: any) => {
     const { size } = useResize();
+   
     return (
         <Container>
             <BoxLink>
                 <DateText>{dateText}</DateText>
-                <LinkWebsait href={website} target="_blank">
-                    {size ? website.slice(0, 40) : website.slice(0, 30)}...
-                </LinkWebsait>
+                {website && (
+                    <LinkWebsait href={website} target="_blank">
+                        {size ? website.slice(0, 40) : website.slice(0, 30)}...
+                    </LinkWebsait>
+                )}
             </BoxLink>
             <Title>{title}</Title>
             {label.isTechNews && <Label>Технические новости</Label>}
@@ -120,7 +123,16 @@ const Document = ({ dateText, website, title, label, image, text, textCount }: a
             <Text>{text}</Text>
             <Box>
                 <a href={website} target="_blank">
-                    <ButtonCustom style={{ color: "#000", fontSize: "16px", borderRadius: "5px", background: "#7ce3e1", padding: " 12px 29px" }}>
+                    <ButtonCustom
+                        disabled={!website}
+                        style={{
+                            color: "#000",
+                            fontSize: "16px",
+                            borderRadius: "5px",
+                            background: `${!website ? "#D2D2D2" : "#7ce3e1"}`,
+                            padding: " 12px 29px",
+                        }}
+                    >
                         Читать в источнике
                     </ButtonCustom>
                 </a>

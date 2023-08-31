@@ -3,7 +3,7 @@ import Slider from "./CarouselFolder/Slider";
 import ArrowLeft from "./CarouselFolder/ArrowLeft";
 import SliderItem from "./CarouselFolder/SliderItem";
 import ArrowRight from "./CarouselFolder/ArrowRight";
-import { ResultType } from "../type";
+import { ResultType, TypeData } from "../type";
 import { useAppSelector } from "../Reducer/store";
 
 const Title = styled.h1<{ border: string; right: string }>`
@@ -61,7 +61,7 @@ const BoxResultSmall = () => {
                     <img src={"images/leftArrow.svg"} alt="arrow" />
                 </ArrowLeft>
                 <SliderItem>
-                    {arrSearchHistogram.data[0].data.map((el: ResultType, index: number) => {
+                    {arrSearchHistogram.data[0].data.map((el: TypeData, index: number) => {
                         const date = el.date.slice(0, 10);
                         return (
                             <Container key={index}>
