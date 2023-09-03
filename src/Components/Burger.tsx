@@ -48,13 +48,13 @@ const Burdger = () => {
             <LineTop
                 background={!activeBurger ? "#029491" : "#fff"}
                 rotate={!activeBurger ? "0" : "-45deg"}
-                translate={!activeBurger ? "0" : "7px"}
+                translate={!activeBurger ? "0" : "0.5rem"}
             ></LineTop>
             <LineCenter background={!activeBurger ? "#029491" : "#fff"} opacity={!activeBurger ? "1" : "0"}></LineCenter>
             <LineDown
                 background={!activeBurger ? "#029491" : "#fff"}
                 rotate={!activeBurger ? "0" : "45deg"}
-                translate={!activeBurger ? "0" : "-7px"}
+                translate={!activeBurger ? "0" : "-0.5rem"}
             ></LineDown>
         </Button>
     );

@@ -9,6 +9,7 @@ import Navigation from "./Navigation";
 import { changeBoolean } from "../Reducer/appSlice";
 import { useEffect } from "react";
 import { requestInfo } from "../api/requstInfo";
+import { Variable } from "../variable";
 
 const HeaderContainer = styled.header<{ position: string; background: string }>`
     position: ${(props) => props.position};
@@ -42,7 +43,7 @@ const Text = styled.p`
 const CountText = styled.p<{ color: string }>`
     color: ${(props) => props.color};
     font-family: Inter;
-    font-size: 14px;
+    font-size: ${Variable.fontSize.primary};
     font-style: normal;
     font-weight: 700;
     line-height: normal;

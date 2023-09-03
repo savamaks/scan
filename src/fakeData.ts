@@ -1,5 +1,4 @@
 import { CarouselItemType, RateType } from "./type";
-import { DocumentType } from "./type";
 
 export const arrCarousel: Array<CarouselItemType> = [
     { image: "images/2.svg", text: "1 Высокая и оперативная скорость обработки заявки" },
