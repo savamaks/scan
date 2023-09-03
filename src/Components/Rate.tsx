@@ -1,17 +1,40 @@
 import styled from "styled-components";
 import { RateType } from "../type";
 import { useAppSelector } from "../Reducer/store";
-import Button from "./ButtonCustom";
 import ButtonCustom from "./ButtonCustom";
+import { arrRate } from "../fakeData";
 
-const Container = styled.div <{border_color:string}>`
+interface ComponentProps {
+    color?: string;
+    background?: string
+    border_color?: string 
+}
+
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 43px;
+    margin: 37px 0 68px;
+    @media (min-width: 900px) {
+        flex-direction: row;
+        justify-content: center;
+        margin: 70px 0 255px;
+        flex-wrap: wrap;
+    }
+`;
+const CardRate = styled.div<ComponentProps>`
     border-radius: 10px;
     box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.2);
     flex-basis: 27%;
-    border: 2px solid ${props=>props.border_color};
-
+    border: 2px solid ${(props) => props.border_color};
+    display: flex;
+    flex-direction: column;
+    @media (min-width: 900px) {
+        min-width: 400px;
+    }
 `;
-const Box = styled.div<{ background: string }>`
+const Box = styled.div<ComponentProps>`
     position: relative;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
@@ -23,7 +46,7 @@ const Box = styled.div<{ background: string }>`
     padding: 30px 0 34px 24px;
 `;
 
-const Title = styled.h2<{ color: string }>`
+const Title = styled.h2<ComponentProps>`
     font-family: Inter;
     font-size: 25px;
     font-style: normal;
@@ -32,7 +55,7 @@ const Title = styled.h2<{ color: string }>`
     letter-spacing: 0.3px;
     color: ${(props) => props.color};
 `;
-const Text = styled.p<{ color: string }>`
+const Text = styled.p<ComponentProps>`
     font-family: Inter;
     font-size: 18px;
     font-style: normal;
@@ -54,6 +77,7 @@ const Block = styled.div`
     display: flex;
     flex-direction: column;
     padding: 33px 24px 30px 24px;
+    position: relative;
 `;
 const BoxPrice = styled.div`
     display: flex;
@@ -118,34 +142,70 @@ const Item = styled.li`
     line-height: normal;
     letter-spacing: 0.18px;
 `;
+const CurrentTariff = styled.p`
+    position: absolute;
+    color: #fff;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.14px;
+    border-radius: 10px;
+    background: #3ba5e0;
+    padding: 3px 13px;
+    right: 2%;
+    top: 3%;
+`;
 
-const Rate = ({ title, text, price, sale, textPrice, li, background, color, image }: RateType) => {
-    const { activePlan } = useAppSelector((state) => state.appSlice);
+const Rate = () => {
+    const { activePlan, loadingLogIn } = useAppSelector((state) => state.appSlice);
+
     return (
-        <Container border_color={title.toLowerCase() === activePlan ? background : "none"} >
-            <Box background={background} >
-                <Title color={color}>{title}</Title>
-                <Text color={color}>{text}</Text>
-                <Image src={image} alt="=img" />
-            </Box>
-            <Block>
-                <BoxPrice>
-                    <Price>{price}</Price>
-                    <Sale>{sale}</Sale>
-                </BoxPrice>
-                <TextPrice>{textPrice}</TextPrice>
-                <NameList>В тариф входит:</NameList>
-                <List>
-                    <Item>{li[0]}</Item>
-                    <Item>{li[1]}</Item>
-                    <Item>{li[2]}</Item>
-                </List>
-                <ButtonCustom style={{ background:`${title.toLowerCase() === activePlan ? "#D2D2D2" : "#5970ff"}`}}>
-                    {title.toLowerCase() === activePlan ? "Перейти в личный кабинет" : "Подробнее"}
-                </ButtonCustom>
-            </Block>
+        <Container>
+            {arrRate.map((el: RateType, index: number) => {
+                return (
+                    <CardRate
+                        key={index}
+                        border_color={el.title.toLowerCase() === activePlan.toLowerCase() && loadingLogIn == "true" ? el.background : "inherit"}
+                    >
+                        <Box background={el.background}>
+                            <Title color={el.color}>{el.title}</Title>
+                            <Text color={el.color}>{el.text}</Text>
+                            <Image src={el.image} alt="=img" />
+                        </Box>
+                        <Block>
+                            {el.title.toLowerCase() === activePlan.toLowerCase() && loadingLogIn == "true" && (
+                                <CurrentTariff>Текущий тариф</CurrentTariff>
+                            )}
+
+                            <BoxPrice>
+                                <Price>{el.price}</Price>
+                                <Sale>{el.sale}</Sale>
+                            </BoxPrice>
+                            <TextPrice>{el.textPrice}</TextPrice>
+                            <NameList>В тариф входит:</NameList>
+                            <List>
+                                {el.li.map((el: any, index) => {
+                                    return <Item key={index}>{el}</Item>;
+                                })}
+                            </List>
+                            <ButtonCustom
+                                style={{
+                                    background: `${
+                                        el.title.toLowerCase() === activePlan.toLowerCase() && loadingLogIn == "true" ? "#D2D2D2" : "#5970ff"
+                                    }`,
+                                }}
+                            >
+                                {el.title.toLowerCase() === activePlan.toLowerCase() && loadingLogIn == "true"
+                                    ? "Перейти в личный кабинет"
+                                    : "Подробнее"}
+                            </ButtonCustom>
+                        </Block>
+                    </CardRate>
+                );
+            })}
         </Container>
-        
     );
 };
 

@@ -1,19 +1,15 @@
 import styled from "styled-components";
-import { DocumentType, TypeItemsArrDocument } from "../../type";
 import Document from "../Document";
-// import { arrDocument, arrResult } from "../../fakeData";
-import BoxResultSmall from "../BoxResultSmall";
 import BoxResult from "../BoxResult";
-import { useResize } from "../../Hooks/useResize";
 import ButtonCustom from "../ButtonCustom";
 import { useAppDispatch, useAppSelector } from "../../Reducer/store";
-import { changeBoolean, changeCount, changeLoading } from "../../Reducer/appSlice";
+import { changeBoolean, changeCount, removeToken } from "../../Reducer/appSlice";
 import { requestDocument } from "../../api/requestDocument";
 import { handlerRequestDocument } from "../../helper/handlerRequestDocument";
-import { useEffect, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import {  Navigate } from "react-router-dom";
 import Loader from "../Loaders/Loader";
-import { validateText } from "../../helper/validateText";
+import { useEffect } from "react";
+import { sessionCheck } from "../../helper/sessionCheck";
 
 const Container = styled.div`
     display: flex;
@@ -68,19 +64,19 @@ const Box = styled.div`
     justify-content: center;
     margin: 0 0 57px 0;
 `;
-const BoxDocumentResult = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 34px;
-    margin: 34px 0 20px;
-    width: 100%;
-    @media (min-width: 900px) {
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-`;
+// const BoxDocumentResult = styled.div`
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     justify-content: center;
+//     gap: 34px;
+//     margin: 34px 0 20px;
+//     width: 100%;
+//     @media (min-width: 900px) {
+//         flex-direction: row;
+//         flex-wrap: wrap;
+//     }
+// `;
 
 const Block = styled.div`
     display: flex;
@@ -93,24 +89,20 @@ const Block = styled.div`
 `;
 
 const ResultPage = () => {
-    const { size } = useResize();
     const {
-        arrSearchHistogram,
         buttonLoadMoreActive,
-        arrDocument,
         resultLogIn,
         arrObjectSearch,
         countLoadingDocument,
-        loadingObjectSearch,
         limitLoadingDocument,
         loadingDocument,
-        loadingHistogram,
+        loadingLogIn
     } = useAppSelector((state) => state.appSlice);
     const dispatch = useAppDispatch();
 
     const loadMore = async (e: any) => {
         e.preventDefault();
-        const requestBody = handlerRequestDocument(arrObjectSearch.items, countLoadingDocument, limitLoadingDocument);
+        const requestBody = handlerRequestDocument(arrObjectSearch, countLoadingDocument, limitLoadingDocument);
 
         if (requestBody !== null) {
             dispatch(changeCount(10));
@@ -121,8 +113,14 @@ const ResultPage = () => {
             }
         }
     };
-
-
+    useEffect(() => {
+        if (loadingLogIn === "true") {
+            const check = sessionCheck(resultLogIn.expire);
+            if (check) {
+                dispatch(removeToken());
+            }
+        }
+    }, []);
     if (!resultLogIn.accessToken) {
         return <Navigate to="/" />;
     } else {
@@ -135,52 +133,19 @@ const ResultPage = () => {
                 </Block>
 
                 <TitleText>Общая сводка</TitleText>
-                <TextResult>Найдено 4 221 вариантов</TextResult>
-                <Box>{size ? <BoxResult /> : <BoxResultSmall />}</Box>
+                <TextResult>Найдено {arrObjectSearch.items.length} вариантов</TextResult>
+                <Box>
+                    <BoxResult />
+                </Box>
                 <TitleText>Список документов</TitleText>
-
-                <BoxDocumentResult>
-                    {arrDocument.map((el: TypeItemsArrDocument, index: number) => {
-                        if (!el.ok) return;
-                        let imgSrc: string = "";
-                        const regex = `img src="`;
-                        const indexStart = el.ok.content.markup.toString().search(regex);
-                        const textResult = validateText(el.ok.content.markup)
-
-                        if (indexStart !== -1) {
-                            const str = el.ok.content.markup.toString().slice(indexStart, -1);
-                            const indexEnd = str.slice(9, -1).search('"');
-                            imgSrc = str.slice(9, indexEnd + 9);
-                        }
-                        // console.log(textResult);
-                        const date = el.ok.issueDate.slice(0, 10);
-                        // const result = el.ok.content.markup.match(/[А-Яа-я]*[\,\.\-\'\"]*\s*<*/g);
-                        // // const text = el.ok.content.markup.replace(imgSrc,'').replace(/\&\w*/gi,'').replace(/\<\w*\s\w*\-\w*\-\w*\=\"\d*\">/gi,'').replace(/\<\/\w*\>|\<\w*\>/gi,'').replace(/<\?\w*\s\w*\=\"\d\.\d\"\s\w*\=\"\w*\-\d\"\?>/gi,'').replace(/<\w*\s\w*\=\"\w*\"\s\w*\-\w*\=\"\w*\">/gi, "")
-                        
-                        // const text = el.ok.content.markup.match(/[а-я\s.]/gi)
-                        // const text = result?.join("").replace(/</g, "").replace(/""/g, "").replace(/\s*-/g, " ").replace(/"\.*"/g, "").slice(0,900)+'...'
-                        return (
-                            <Document
-                                key={index}
-                                dateText={date}
-                                website={el.ok.url}
-                                title={el.ok.source.name}
-                                label={el.ok.attributes}
-                                image={imgSrc}
-                                text={el.ok.content.markup}
-                                textCount={el.ok.attributes.wordCount}
-                            />
-                        );
-                    })}
-                </BoxDocumentResult>
-
+                <Document />
                 {loadingDocument === "true" && !buttonLoadMoreActive && (
                     <ButtonCustom onClick={loadMore} style={{ padding: "18px 40px ", alignSelf: "center", background: "#5970ff" }}>
                         Показать больше
                     </ButtonCustom>
                 )}
 
-                {loadingDocument === "loading" && <Loader />}
+                {loadingDocument !== "true" && <Loader />}
             </Container>
         );
     }

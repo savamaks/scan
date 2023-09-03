@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "../Reducer/store";
 import { changeBoolean } from "../Reducer/appSlice";
-import { useDispatch } from "react-redux";
 
 const Container = styled.nav`
     display: flex;

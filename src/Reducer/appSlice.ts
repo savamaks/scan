@@ -1,7 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { TypeInitialState } from "../type";
 import { requestHistogram } from "../api/requestHistogram";
-import { requestObjectSearch } from "../api/requestObjectSearch";
 import { requestDocument } from "../api/requestDocument";
 import { requestLogin } from "../api/requestLogin";
 import { requestInfo } from "../api/requstInfo";
@@ -14,12 +13,12 @@ const initialState: TypeInitialState = {
     buttonEntry: true,
     buttonReq: false,
     buttonLoadMoreActive: true,
-    activePlan: "pro",
+    activePlan: "beginner",
     countSlider: 5,
     eventFiltersInfo: {},
     checkedArr: [],
     arrSearchHistogram: { data: [] },
-    arrObjectSearch: { items: [] },
+    arrObjectSearch: { items: [], mappings: [{ inn: "", entityIds: [] }] },
     limitLoadingDocument: 10,
     countLoadingDocument: 0,
     arrDocument: [],
@@ -27,7 +26,6 @@ const initialState: TypeInitialState = {
     loadingInfo: "",
     loadingHistogram: "",
     loadingDocument: "",
-    loadingObjectSearch: "",
     statusError: "",
     resultLogIn: {
         accessToken: "",
@@ -82,16 +80,15 @@ const appSlice = createSlice({
         },
         clearArr(state) {
             state.arrSearchHistogram = { data: [] };
-            state.arrObjectSearch = { items: [] };
+            state.arrObjectSearch = { items: [], mappings: [{ inn: "", entityIds: [] }] };
             state.arrDocument = [];
             state.countLoadingDocument = 0;
             state.loadingHistogram = "";
             state.loadingDocument = "";
-            state.loadingObjectSearch = "";
         },
         addArrObjectSearch(state, action) {
             state.arrObjectSearch = action.payload;
-        },
+        }
     },
     extraReducers(builder) {
         //requestLogin
@@ -130,8 +127,13 @@ const appSlice = createSlice({
             state.statusError = "";
         }),
             builder.addCase(requestHistogram.fulfilled, (state, action) => {
-                state.loadingHistogram = "true";
-                state.arrSearchHistogram = action.payload;
+                if (action.payload === null) {
+                    console.log(action.payload);
+                    state.loadingHistogram = "error";
+                } else {
+                    state.loadingHistogram = "true";
+                    state.arrSearchHistogram = action.payload;
+                }
             }),
             builder.addCase(requestHistogram.rejected, (state) => {
                 state.loadingHistogram = "";

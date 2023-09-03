@@ -1,4 +1,4 @@
-export const handlerRequestObjectSearch = ({ inn, limit, from, to, checkedArr }: any) => {
+export const handlerRequestObjectSearch = ({ inn, limit, from, to }: any) => {
     // console.log(inn, limit, from, to, checkedArr);
     const requestBody = {
         issueDateInterval: {

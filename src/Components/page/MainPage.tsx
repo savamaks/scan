@@ -1,16 +1,18 @@
 import styled from "styled-components";
-import { arrCarousel, arrRate } from "../../fakeData";
-import { RateType } from "../../type";
+import { arrCarousel } from "../../fakeData";
 import CarouselItem from "../CarouselItem";
 import { useResize } from "../../Hooks/useResize";
 import Rate from "../Rate";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import SliderItem from "../CarouselFolder/SliderItem";
 import Slider from "../CarouselFolder/Slider";
 import ArrowLeft from "../CarouselFolder/ArrowLeft";
 import ArrowRight from "../CarouselFolder/ArrowRight";
-import { useAppSelector } from "../../Reducer/store";
+import { useAppDispatch, useAppSelector } from "../../Reducer/store";
 import ButtonCustom from "../ButtonCustom";
+import { useEffect } from "react";
+import { sessionCheck } from "../../helper/sessionCheck";
+import { removeToken } from "../../Reducer/appSlice";
 
 const ContainerMain = styled.div`
     padding: 0 14px;
@@ -58,19 +60,6 @@ const BoxCarousel = styled.div`
     gap: 10px;
     margin: 32px auto 80px;
 `;
-const BoxRate = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 43px;
-    margin-bottom: 43px;
-
-    @media (min-width: 900px) {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        margin-bottom: 255px;
-    }
-`;
 
 const Block = styled.div`
     display: flex;
@@ -98,8 +87,16 @@ const ImageOne = styled.img`
 `;
 const MainPage = () => {
     const { size } = useResize();
-    const { resultLogIn } = useAppSelector((state) => state.appSlice);
-
+    const { loadingLogIn, resultLogIn } = useAppSelector((state) => state.appSlice);
+    const dispatch = useAppDispatch();
+    useEffect(() => {
+        if (loadingLogIn === "true") {
+            const check = sessionCheck(resultLogIn.expire);
+            if (check) {
+                dispatch(removeToken());
+            }
+        }
+    }, []);
     return (
         <ContainerMain>
             <Block>
@@ -133,25 +130,8 @@ const MainPage = () => {
             </BoxCarousel>
             <Image src={size ? "images/group-14.svg" : "images/group-14small.svg"} alt="img" />
 
-            <BoxRate>
-                <TitleText>наши тарифы</TitleText>
-                {arrRate.map((el: RateType, index: number) => {
-                    return (
-                        <Rate
-                            key={index}
-                            title={el.title}
-                            text={el.text}
-                            price={el.price}
-                            sale={el.sale}
-                            textPrice={el.textPrice}
-                            li={el.li}
-                            background={el.background}
-                            color={el.color}
-                            image={el.image}
-                        />
-                    );
-                })}
-            </BoxRate>
+            <TitleText>наши тарифы</TitleText>
+            <Rate />
         </ContainerMain>
     );
 };

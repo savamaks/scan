@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { changeBoolean } from "../Reducer/appSlice";
 import { useAppDispatch, useAppSelector } from "../Reducer/store";
-import { Link } from "react-router-dom";
 
 const Button = styled.button`
     display: flex;

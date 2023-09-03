@@ -1,4 +1,4 @@
-export const handlerRequestHistogram = ({ inn, limit, from, to, checkedArr }: any) => {
+export const handlerRequestHistogram = ({ inn, limit, from, to,tonality }: any) => {
     // console.log(inn, limit, from, to, checkedArr);
     const requestBody = {
         issueDateInterval: {
@@ -18,7 +18,7 @@ export const handlerRequestHistogram = ({ inn, limit, from, to, checkedArr }: an
                     },
                 ],
                 onlyMainRole: true,
-                tonality: "any",
+                tonality: `${tonality}`,
                 onlyWithRiskFactors: false,
                 riskFactors: {
                     and: [],

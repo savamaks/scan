@@ -1,8 +1,18 @@
-import styled from "styled-components";
-import { DocumentType } from "../type";
+import styled, { keyframes } from "styled-components";
+import { TypeItemsArrDocument } from "../type";
 import ButtonCustom from "./ButtonCustom";
 import { useResize } from "../Hooks/useResize";
+import { useAppSelector } from "../Reducer/store";
+import { validateText } from "../helper/validateText";
 
+const FadeIn = keyframes`
+    0%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
+`;
 const Container = styled.div`
     border-radius: 10px;
     background: #fff;
@@ -18,6 +28,7 @@ const Container = styled.div`
     @media (min-width: 900px) {
         align-self: stretch;
     }
+    animation: ${FadeIn} 1s ease;
 `;
 const BoxLink = styled.div`
     align-items: flex-end;
@@ -100,46 +111,110 @@ const TextCount = styled.p`
     font-weight: 400;
     line-height: normal;
 `;
-
-const Document = ({ dateText, website, title, label, image, text, textCount }: any) => {
+const BoxDocumentResult = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 34px;
+    margin: 34px 0 20px;
+    width: 100%;
+    @media (min-width: 900px) {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+`;
+const Document = () => {
     const { size } = useResize();
-   
+    const { arrDocument } = useAppSelector((state) => state.appSlice);
     return (
-        <Container>
-            <BoxLink>
-                <DateText>{dateText}</DateText>
-                {website && (
-                    <LinkWebsait href={website} target="_blank">
-                        {size ? website.slice(0, 40) : website.slice(0, 30)}...
-                    </LinkWebsait>
-                )}
-            </BoxLink>
-            <Title>{title}</Title>
-            {label.isTechNews && <Label>Технические новости</Label>}
-            {label.isDigest && <Label>сводки новостей</Label>}
-            {label.isAnnouncement && <Label>анонсы и события</Label>}
+        <BoxDocumentResult>
+            {arrDocument.map((el: TypeItemsArrDocument, index: number) => {
+                setInterval(() => {}, 1000);
 
-            {image && <BoxImage background={image}></BoxImage>}
-            <Text>{text}</Text>
-            <Box>
-                <a href={website} target="_blank">
-                    <ButtonCustom
-                        disabled={!website}
-                        style={{
-                            color: "#000",
-                            fontSize: "16px",
-                            borderRadius: "5px",
-                            background: `${!website ? "#D2D2D2" : "#7ce3e1"}`,
-                            padding: " 12px 29px",
-                        }}
-                    >
-                        Читать в источнике
-                    </ButtonCustom>
-                </a>
-                <TextCount>{textCount}</TextCount>
-            </Box>
-        </Container>
+                if (!el.ok) return;
+                let imgSrc: string = "";
+                const regex = `img src="`;
+                const indexStart = el.ok.content.markup.toString().search(regex);
+                const textDocument = validateText(el.ok.content.markup);
+
+                if (indexStart !== -1) {
+                    const str = el.ok.content.markup.toString().slice(indexStart, -1);
+                    const indexEnd = str.slice(9, -1).search('"');
+                    imgSrc = str.slice(9, indexEnd + 9);
+                }
+                const date = el.ok.issueDate.slice(0, 10);
+
+                return (
+                    <Container key={index}>
+                        <BoxLink>
+                            <DateText>{date}</DateText>
+                            {imgSrc && (
+                                <LinkWebsait href={imgSrc} target="_blank">
+                                    {size ? imgSrc.slice(0, 40) : imgSrc.slice(0, 30)}...
+                                </LinkWebsait>
+                            )}
+                        </BoxLink>
+                        <Title>{el.ok.source.name}</Title>
+                        {el.ok.attributes.isTechNews && <Label>Технические новости</Label>}
+                        {el.ok.attributes.isDigest && <Label>сводки новостей</Label>}
+                        {el.ok.attributes.isAnnouncement && <Label>анонсы и события</Label>}
+
+                        {imgSrc && <BoxImage background={imgSrc}></BoxImage>}
+                        <Text>{textDocument.slice(0, 800) + "..."}</Text>
+                        <Box>
+                            <a href={el.ok.url} target="_blank">
+                                <ButtonCustom
+                                    disabled={!el.ok.url}
+                                    style={{
+                                        color: "#000",
+                                        fontSize: "16px",
+                                        borderRadius: "5px",
+                                        background: `${!el.ok.url ? "#D2D2D2" : "#7ce3e1"}`,
+                                        padding: " 12px 29px",
+                                    }}
+                                >
+                                    Читать в источнике
+                                </ButtonCustom>
+                            </a>
+                            <TextCount>{el.ok.attributes.wordCount}</TextCount>
+                        </Box>
+                    </Container>
+                );
+            })}
+        </BoxDocumentResult>
     );
 };
 
 export default Document;
+
+// <Document />;
+// {
+//     arrDocument.map((el: TypeItemsArrDocument, index: number) => {
+//         if (!el.ok) return;
+//         let imgSrc: string = "";
+//         const regex = `img src="`;
+//         const indexStart = el.ok.content.markup.toString().search(regex);
+//         const textDocument = validateText(el.ok.content.markup);
+
+//         if (indexStart !== -1) {
+//             const str = el.ok.content.markup.toString().slice(indexStart, -1);
+//             const indexEnd = str.slice(9, -1).search('"');
+//             imgSrc = str.slice(9, indexEnd + 9);
+//         }
+//         const date = el.ok.issueDate.slice(0, 10);
+
+//         return (
+//             <Document
+//                 key={index}
+//                 dateText={date}
+//                 website={el.ok.url}
+//                 title={el.ok.source.name}
+//                 label={el.ok.attributes}
+//                 image={imgSrc}
+//                 text={textDocument.slice(0, 800) + "..."}
+//                 textCount={el.ok.attributes.wordCount}
+//             />
+//         );
+//     });
+// }

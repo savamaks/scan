@@ -13,14 +13,17 @@ import {
     clearArr,
     changeBoolean,
     addArrObjectSearch,
+    removeToken,
 } from "../../Reducer/appSlice";
 import { handlerRequestHistogram } from "../../helper/handlerRequestHistogram";
 import { requestHistogram } from "../../api/requestHistogram";
 import { requestObjectSearch } from "../../api/requestObjectSearch";
-import { handlerRequestObjectSearch } from "../../helper/handlerRequestObjectSearch";
 import { requestDocument } from "../../api/requestDocument";
 import { handlerRequestDocument } from "../../helper/handlerRequestDocument";
-import { Link, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
+import { validateDate } from "../../helper/validateDate";
+import { validateInn } from "../../helper/validateInn";
+import { sessionCheck } from "../../helper/sessionCheck";
 
 const SearchContainer = styled.div`
     display: flex;
@@ -116,9 +119,9 @@ const TextError = styled.p`
     font-weight: 400;
     line-height: normal;
     letter-spacing: 0.14px;
-    display: none;
+    /* display: none; */
 `;
-const Input = styled.input`
+const Input = styled.input<{ border: string; shadow: string }>`
     color: #000;
     font-family: Inter;
     font-size: 14px;
@@ -128,17 +131,17 @@ const Input = styled.input`
     letter-spacing: 0.42px;
     height: 43px;
     border-radius: 5px;
-    border: 1px solid #c7c7c7;
+    border: 1px solid ${(props) => props.border};
     background: #fff;
-    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.05);
+    box-shadow: 0px 0px 20px 0px ${(props) => props.shadow};
     margin-top: 20px;
     text-align: center;
     appearance: none; //убрал стрелку
     white-space: nowrap;
 
     &:invalid {
-        border: 1px solid #ff5959;
-        box-shadow: 0px 0px 20px 0px rgba(255, 89, 89, 0.2);
+        /* border: 1px solid #ff5959 #c7c7c7; */
+        /* box-shadow: 0px 0px 20px 0px  rgba(0, 0, 0, 0.05) rgba(255, 89, 89, 0.2); */
     }
     &:focus {
         outline: none;
@@ -146,16 +149,17 @@ const Input = styled.input`
     &::placeholder {
         opacity: 0.4;
     }
-    &:invalid + ${TextError} {
+    /* &:invalid + ${TextError} {
         display: block;
     }
     &:valid + ${TextError} {
         display: none;
-    }
+    } */
 `;
 const Box = styled.div`
     display: flex;
     flex-direction: column;
+    justify-content: center;
     @media (min-width: 900px) {
         flex-direction: row;
         gap: 20px;
@@ -183,6 +187,7 @@ const Select = styled.select`
         opacity: 0.4;
     }
 `;
+const Option = styled.option``;
 
 const TextField = styled.p`
     color: #949494;
@@ -243,13 +248,7 @@ const InputCheked = styled.input`
 
 const SearchPage = (): JSX.Element => {
     const { size } = useResize();
-    const {
-        buttonLoadMoreActive,
-        button,
-        checkedArr,
-        resultLogIn,
-        limitLoadingDocument,
-    } = useAppSelector((state) => state.appSlice);
+    const { loadingLogIn, buttonLoadMoreActive, button, checkedArr, resultLogIn, limitLoadingDocument } = useAppSelector((state) => state.appSlice);
     const dispatch = useAppDispatch();
 
     const [inn, setInn] = useState<number>(0);
@@ -257,6 +256,11 @@ const SearchPage = (): JSX.Element => {
     const [from, setFrom] = useState("");
     const [to, setTo] = useState("");
     const [flag, setFlag] = useState(false);
+    const [errorDate, setErrorDate] = useState(false);
+    const [errorInn, setErrorInn] = useState(false);
+    const [errorCount, setCount] = useState(false);
+    const [tonality, setTonality] = useState("any");
+
     const checkedRadio = (e: any) => {
         if (e.target.checked) {
             dispatch(addChecked(e.target.parentNode.children[1].textContent));
@@ -264,44 +268,64 @@ const SearchPage = (): JSX.Element => {
             dispatch(removeChecked(e.target.parentNode.children[1].textContent));
         }
     };
-
     const changeINN = (e: any) => {
-        setInn(+e.target.value);
+        setInn(e.target.value.toString());
+        setErrorInn(!validateInn(e.target.value.toString()));
     };
     const changeCountDocument = (e: any) => {
+        setCount(false);
         setLimit(e.target.value);
+        if (e.target.value > 1000 || e.target.value <= 0) {
+            setCount(true);
+        }
+    };
+    // дата от
+    const changeDateFrom = (e: any) => {
+        console.log(e.target.value);
+
+        setErrorDate(false);
+        setFrom(e.target.value);
+        if (to !== "") {
+            setErrorDate(validateDate(e.target.value, to));
+        }
+    };
+    //дата до
+    const changeDateTo = (e: any) => {
+        setErrorDate(false);
+        setTo(e.target.value);
+        if (from !== "") {
+            setErrorDate(validateDate(from, e.target.value));
+        }
     };
 
-    const changeDateTo = (e: any) => {
-        setTo(e.target.value);
-    };
-    const changeDateFrom = (e: any) => {
-        setFrom(e.target.value);
+    const changeSelect = (e: any) => {
+        setTonality(e.target.value);
     };
     const searchButton = async (e: any) => {
         e.preventDefault();
         setFlag(true);
 
-        dispatch(clearArr()) //удалить все данные для нового запроса
+        dispatch(clearArr()); //удалить все данные для нового запроса
         if (buttonLoadMoreActive) {
             dispatch(changeBoolean("buttonLoadMoreActive"));
         }
 
         //создание первого запроса, отправка и сохраниние
-        const requestBody = handlerRequestHistogram({ inn, limit, from, to, checkedArr });
+        const requestBody = handlerRequestHistogram({ inn, limit, from, to, checkedArr, tonality });
         await dispatch(requestHistogram({ body: requestBody, accessToken: resultLogIn.accessToken }));
-
         //создание второго запроса, отправка и сохраниние
+
         const result = await requestObjectSearch({ body: requestBody, accessToken: resultLogIn.accessToken });
 
         if (result.items.length <= 10) {
             dispatch(changeBoolean("buttonLoadMoreActive"));
         }
+
         // создание третьего запроса, отправка и сохраниние
-        const requestDocumentBody = await handlerRequestDocument(result.items, 0, limitLoadingDocument);
+        const requestDocumentBody = await handlerRequestDocument(result, 0, limitLoadingDocument);
         await dispatch(requestDocument({ body: requestDocumentBody, accessToken: resultLogIn.accessToken }));
-        dispatch(addArrObjectSearch(result));
         dispatch(changeCount(10));
+        dispatch(addArrObjectSearch(result));
     };
 
     useEffect(() => {
@@ -318,8 +342,14 @@ const SearchPage = (): JSX.Element => {
             dispatch(cleanArrChecked());
         }
     }, [size]);
-
-
+    useEffect(() => {
+        if (loadingLogIn === "true") {
+            const check = sessionCheck(resultLogIn.expire);
+            if (check) {
+                dispatch(removeToken());
+            }
+        }
+    }, []);
     if (!flag && resultLogIn.accessToken) {
         return (
             <SearchContainer>
@@ -332,23 +362,48 @@ const SearchPage = (): JSX.Element => {
                 <Form>
                     <BoxChecked>
                         <TextLabel>ИНН компании *</TextLabel>
-                        <Input onChange={changeINN} placeholder="10 цифр" minLength={10} maxLength={10} />
-                        <TextError>Введите корректные данные</TextError>
+                        <Input
+                            shadow={errorInn ? "rgba(255, 89, 89, 0.2)" : "rgba(0, 0, 0, 0.05)"}
+                            border={errorInn ? "#ff5959" : "#c7c7c7"}
+                            onChange={changeINN}
+                            placeholder="10 цифр"
+                            minLength={10}
+                            maxLength={10}
+                        />
+                        {errorInn && <TextError>Введите корректные данные</TextError>}
                         <TextLabel>Тональность</TextLabel>
-                        <Select>
-                            <option value="any">Любая</option>
-                            <option value="negative">Негативная</option>
-                            <option value="positive">Позитивная</option>
+                        <Select onChange={changeSelect}>
+                            <Option value="any">Любая</Option>
+                            <Option value="negative">Негативная</Option>
+                            <Option value="positive">Позитивная</Option>
                         </Select>
                         <TextLabel>Количество документов в выдаче*</TextLabel>
-                        <Input onChange={changeCountDocument} placeholder="От 1 до 1000" type="number" />
-                        <TextError>Обязательное поле</TextError>
+                        <Input
+                            shadow={errorCount ? "rgba(255, 89, 89, 0.2)" : "rgba(0, 0, 0, 0.05)"}
+                            border={errorCount ? "#ff5959" : "#c7c7c7"}
+                            onChange={changeCountDocument}
+                            placeholder="От 1 до 1000"
+                            type="number"
+                        />
+                        {errorCount && <TextError>Превышен диапазон</TextError>}
                         <TextLabel>Диапазон поиска *</TextLabel>
                         <Box>
-                            <Input onChange={changeDateFrom} defaultValue="2018-01-01" placeholder="Дата начала" type="date" />
-                            <Input onChange={changeDateTo} defaultValue="2023-01-01" placeholder="Дата конца" type="date" />
+                            <Input
+                                shadow={errorDate ? "rgba(255, 89, 89, 0.2)" : "rgba(0, 0, 0, 0.05)"}
+                                border={errorDate ? "#ff5959" : "#c7c7c7"}
+                                onChange={changeDateFrom}
+                                placeholder="Дата начала"
+                                type="date"
+                            />
+                            <Input
+                                shadow={errorDate ? "rgba(255, 89, 89, 0.2)" : "rgba(0, 0, 0, 0.05)"}
+                                border={errorDate ? "#ff5959" : "#c7c7c7"}
+                                onChange={changeDateTo}
+                                placeholder="Дата конца"
+                                type="date"
+                            />
                         </Box>
-                        <TextError>Введите корректные данные</TextError>
+                        {errorDate && <TextError>Введите корректные данные</TextError>}
                     </BoxChecked>
 
                     <BoxChecked>

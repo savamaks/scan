@@ -6,7 +6,7 @@ import { useResize } from "../Hooks/useResize";
 import LogIn from "./LogIn";
 import { Link } from "react-router-dom";
 import Navigation from "./Navigation";
-import { changeBoolean, changeBooleanName } from "../Reducer/appSlice";
+import { changeBoolean } from "../Reducer/appSlice";
 import { useEffect } from "react";
 import { requestInfo } from "../api/requstInfo";
 
@@ -47,11 +47,21 @@ const CountText = styled.p<{ color: string }>`
     font-weight: 700;
     line-height: normal;
 `;
+const Block = styled.div`
+    display: flex;
+    gap: 7px;
+    flex-direction: column;
+    
+`
 const Box = styled.div`
     display: flex;
     align-items: center;
-    gap: 9px;
+    gap: 7px;
     justify-content: flex-end;
+    @media (max-width:900px) {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 `;
 const Header = () => {
     const { loadingLogIn, loadingInfo, activeBurger, eventFiltersInfo, resultLogIn } = useAppSelector((state) => state.appSlice);
@@ -65,12 +75,11 @@ const Header = () => {
     const { size } = useResize();
 
     useEffect(() => {
-        if (loadingLogIn ==='true') {
-            console.log("запуск Инфо");
+        if (loadingLogIn === "true") {
             dispatch(requestInfo(resultLogIn.accessToken));
         }
     }, [loadingLogIn]);
-
+    
     return (
         <HeaderContainer position={activeBurger ? "sticky" : "none"} background={activeBurger ? "#029491" : "#FFF"}>
             <Link to="/">
@@ -78,9 +87,9 @@ const Header = () => {
             </Link>
 
             {size && <Navigation />}
-            {loadingLogIn === "true"&& resultLogIn.accessToken !== "" && size && (
+            {loadingLogIn === "true" && resultLogIn.accessToken !== "" && !activeBurger && (
                 <Container>
-                    <div>
+                
                         {loadingInfo === "true" ? (
                             <>
                                 <Box>
@@ -95,7 +104,7 @@ const Header = () => {
                         ) : (
                             <Loader />
                         )}
-                    </div>
+                  
                 </Container>
             )}
             {!size ? <Burdger /> : <LogIn />}

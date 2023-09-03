@@ -1,6 +1,4 @@
 import styled from "styled-components";
-import Loader from "./Loaders/Loader";
-import LoaderButton from "./Loaders/LoaderButton";
 
 const Container = styled.button`
     color: #fff;

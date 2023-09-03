@@ -5,7 +5,6 @@ import SliderItem from "./CarouselFolder/SliderItem";
 import Slider from "./CarouselFolder/Slider";
 import ArrowLeft from "./CarouselFolder/ArrowLeft";
 import ArrowRight from "./CarouselFolder/ArrowRight";
-import { useEffect } from "react";
 import { useAppSelector } from "../Reducer/store";
 import Loader from "./Loaders/Loader";
 
@@ -16,6 +15,9 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     margin: 0 10px 0 10px;
+    @media (max-width: 900px) {
+        flex-direction: column;
+    }
 `;
 const MainBox = styled.div`
     background: #029491;
@@ -23,6 +25,11 @@ const MainBox = styled.div`
     flex-direction: column;
     gap: 26px;
     padding: 17px 28px;
+    @media (max-width: 900px) {
+        flex-direction: row;
+        padding: 23px 23px;
+
+    }
 `;
 const Title = styled.p`
     color: #fff;
@@ -32,6 +39,7 @@ const Title = styled.p`
     font-weight: 500;
     line-height: normal;
     letter-spacing: 0.4px;
+   
 `;
 const Box = styled.div`
     display: flex;
@@ -39,6 +47,12 @@ const Box = styled.div`
     align-items: center;
     gap: 26px;
     padding: 18px;
+    @media (max-width: 900px) {
+        width: 100%;
+        flex-direction: row;
+        padding: 18px 0 28px;
+        gap: 55px;
+    }
     /* border-right: 1px solid #949494; */
 `;
 const Text = styled.div`
@@ -50,6 +64,7 @@ const Text = styled.div`
     line-height: normal;
     letter-spacing: 0.36px;
     white-space: nowrap;
+    
 `;
 const Line = styled.div`
     background: #949494;
@@ -64,14 +79,14 @@ const Block = styled.div`
 `;
 
 const BoxResult = () => {
-    const { width } = useResize(); //ширина окна
+    const { width, size } = useResize(); //ширина окна
     const { loadingHistogram, arrSearchHistogram } = useAppSelector((state) => state.appSlice);
     if (width > 1440) {
     }
     const countCell = Math.round(width / 127) - 4; //колличество ячеек
 
     return (
-        <Slider count={countCell} lengthArr={arrSearchHistogram.data.length === 0 ? 10:arrSearchHistogram.data[0].data.length}>
+        <Slider count={size ? countCell : 1} lengthArr={arrSearchHistogram.data.length === 0 ? 10 : arrSearchHistogram.data[0].data.length}>
             <ArrowLeft>
                 <img src={"images/leftArrow.svg"} alt="arrow-left" />
             </ArrowLeft>
@@ -93,13 +108,13 @@ const BoxResult = () => {
                                         <Text>{el.value}</Text>
                                         <Text>{arrSearchHistogram.data[1].data[index].value}</Text>
                                     </Box>
-                                    {index !== arrSearchHistogram.data[0].data.length - 1 && <Line></Line>}
+                                    {size && index !== arrSearchHistogram.data[0].data.length - 1 && <Line></Line>}
                                 </Block>
                             );
                         })}
                     </SliderItem>
                 ) : (
-                    <div style={{ width: "500px", textAlign: "center" }}>
+                    <div style={{display:'flex', width:`${!size?'280px':'500px'}` , height:'100px',alignItems:'center',justifyContent:'center' }}>
                         <Loader />
                     </div>
                 )}

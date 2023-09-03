@@ -1,11 +1,10 @@
 import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "../../Reducer/store";
-import { changeBoolean, changeBooleanName } from "../../Reducer/appSlice";
+import { changeBoolean } from "../../Reducer/appSlice";
 import { useEffect, useState } from "react";
 import { useResize } from "../../Hooks/useResize";
 import ButtonCustom from "../ButtonCustom";
 import { requestLogin } from "../../api/requestLogin";
-import { TypeResult } from "src/type";
 import { Navigate } from "react-router-dom";
 import Loader from "../Loaders/Loader";
 

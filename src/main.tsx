@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
-import { createGlobalStyle } from "styled-components";
+import { StyleSheetManager, createGlobalStyle } from "styled-components";
 import store from "./Reducer/store.ts";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
@@ -54,8 +54,9 @@ const GlobalStyle = createGlobalStyle`
     max-width: 1440px;
     grid-template: minmax(55px, auto) 1fr minmax(70px, auto) / 1fr;
     grid-template-areas: "header" "main" "footer";
+
   }
-  
+
   
 `;
 
@@ -64,7 +65,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Provider store={store}>
             <GlobalStyle />
             <BrowserRouter>
-                <App />
+                <StyleSheetManager enableVendorPrefixes>
+                    <App />
+                </StyleSheetManager>
             </BrowserRouter>
         </Provider>
     </React.StrictMode>

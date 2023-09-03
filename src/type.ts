@@ -64,7 +64,7 @@ type TypeMappingArrObject = {
 };
 type TypeArrObjectSearch = {
     items: Array<TypeItemsObjectSearch>;
-    mappings?: Array<TypeMappingArrObject>;
+    mappings: Array<TypeMappingArrObject>;
 };
 type TypeAttributes = {
     isTechNews: boolean;
@@ -118,7 +118,6 @@ export type TypeInitialState = {
     loadingHistogram: string;
     statusError: string;
     loadingDocument: string;
-    loadingObjectSearch: string;
     loadingLogIn: string;
     resultLogIn: TypeResultLogIn;
     loadingInfo: string;

@@ -1,8 +1,11 @@
+
+
 export const validateText = (str: string) => {
     const arrOne: any = [];
     const arrTwo: any = [];
-    console.log(str);
-    str.split("").map((el: any, index: number) => {
+    
+    const newStr = str.replace(/\&lt\;/gi,'<').replace(/\&gt\;/gi,'>')
+    newStr.split("").map((el: any, index: number) => {
         if (el === "<") {
             arrOne.push(index);
         } else if (el === ">") {
@@ -12,14 +15,12 @@ export const validateText = (str: string) => {
     const count = 0;
     const arrText: any = [];
 
-    arrTwo.map((el: any, index: number) => {
-        arrText.push(str.slice(arrTwo[index] + 1, arrOne[index + 1]));
+    arrTwo.map(( index: number) => {
+        arrText.push(newStr.slice(arrTwo[index] + 1, arrOne[index + 1]));
         count + 2;
     });
-    const we = ''
-    
-    return  arrText.join("").replace(/\&lt\;.*\&gt\;|\&lt\;\/.*\&gt\;/gi,'')
+
+
+
+    return  arrText.join("").replace(/\//gi,'')
 };
-
-
-//.replace(/\&lt\;|\/|i\&gt|p\&gt|div\&gt|body\&gt|data\&gt|b\&gt|\;|br\&gt|\|/gi,'')

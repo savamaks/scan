@@ -31,28 +31,6 @@ const Line = styled.div`
     height: 26px;
     background: #029491;
 `;
-const EntryButton = styled.button`
-    color: #000;
-    font-family: Inter;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    border-radius: 5px;
-    background: #7ce3e1;
-    padding: 5px 12px;
-    @media (max-width: 900px) {
-        color: #000;
-        font-family: Inter;
-        font-size: 20px;
-        font-style: normal;
-        font-weight: 500;
-        line-height: normal;
-        letter-spacing: 0.2px;
-        width: 78vw;
-        height: 52px;
-    }
-`;
 const Container = styled.div`
     display: flex;
     gap: 3px;
@@ -95,7 +73,6 @@ const LogIn = () => {
 
     const exitButton = () => {
         dispatch(removeToken())
-        console.log('object');
     };
     if (!resultLogIn.accessToken ) {
         return (
