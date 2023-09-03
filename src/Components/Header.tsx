@@ -47,12 +47,7 @@ const CountText = styled.p<{ color: string }>`
     font-weight: 700;
     line-height: normal;
 `;
-const Block = styled.div`
-    display: flex;
-    gap: 7px;
-    flex-direction: column;
-    
-`
+
 const Box = styled.div`
     display: flex;
     align-items: center;

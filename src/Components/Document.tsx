@@ -130,8 +130,6 @@ const Document = () => {
     return (
         <BoxDocumentResult>
             {arrDocument.map((el: TypeItemsArrDocument, index: number) => {
-                setInterval(() => {}, 1000);
-
                 if (!el.ok) return;
                 let imgSrc: string = "";
                 const regex = `img src="`;
@@ -155,7 +153,7 @@ const Document = () => {
                                 </LinkWebsait>
                             )}
                         </BoxLink>
-                        <Title>{el.ok.source.name}</Title>
+                        <Title>{el.ok.title.text}</Title>
                         {el.ok.attributes.isTechNews && <Label>Технические новости</Label>}
                         {el.ok.attributes.isDigest && <Label>сводки новостей</Label>}
                         {el.ok.attributes.isAnnouncement && <Label>анонсы и события</Label>}

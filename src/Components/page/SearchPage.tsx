@@ -139,22 +139,14 @@ const Input = styled.input<{ border: string; shadow: string }>`
     appearance: none; //убрал стрелку
     white-space: nowrap;
 
-    &:invalid {
-        /* border: 1px solid #ff5959 #c7c7c7; */
-        /* box-shadow: 0px 0px 20px 0px  rgba(0, 0, 0, 0.05) rgba(255, 89, 89, 0.2); */
-    }
+    
     &:focus {
         outline: none;
     }
     &::placeholder {
         opacity: 0.4;
     }
-    /* &:invalid + ${TextError} {
-        display: block;
-    }
-    &:valid + ${TextError} {
-        display: none;
-    } */
+    
 `;
 const Box = styled.div`
     display: flex;
@@ -252,14 +244,14 @@ const SearchPage = (): JSX.Element => {
     const dispatch = useAppDispatch();
 
     const [inn, setInn] = useState<number>(0);
-    const [limit, setLimit] = useState<number | string>("");
-    const [from, setFrom] = useState("");
-    const [to, setTo] = useState("");
-    const [flag, setFlag] = useState(false);
-    const [errorDate, setErrorDate] = useState(false);
-    const [errorInn, setErrorInn] = useState(false);
-    const [errorCount, setCount] = useState(false);
-    const [tonality, setTonality] = useState("any");
+    const [limit, setLimit] = useState<number >(0);
+    const [from, setFrom] = useState<string>("");
+    const [to, setTo] = useState<string>("");
+    const [flag, setFlag] = useState<boolean>(false);
+    const [errorDate, setErrorDate] = useState<boolean>(false);
+    const [errorInn, setErrorInn] = useState<boolean>(false);
+    const [errorCount, setCount] = useState<boolean>(false);
+    const [tonality, setTonality] = useState<string>("any");
 
     const checkedRadio = (e: any) => {
         if (e.target.checked) {
@@ -281,8 +273,6 @@ const SearchPage = (): JSX.Element => {
     };
     // дата от
     const changeDateFrom = (e: any) => {
-        console.log(e.target.value);
-
         setErrorDate(false);
         setFrom(e.target.value);
         if (to !== "") {
@@ -311,7 +301,7 @@ const SearchPage = (): JSX.Element => {
         }
 
         //создание первого запроса, отправка и сохраниние
-        const requestBody = handlerRequestHistogram({ inn, limit, from, to, checkedArr, tonality });
+        const requestBody = handlerRequestHistogram({ inn, limit, from, to, tonality });
         await dispatch(requestHistogram({ body: requestBody, accessToken: resultLogIn.accessToken }));
         //создание второго запроса, отправка и сохраниние
 
@@ -329,7 +319,7 @@ const SearchPage = (): JSX.Element => {
     };
 
     useEffect(() => {
-        if (inn !== 0 && limit !== "" && from !== "" && to !== "") {
+        if (inn !== 0 && limit !== 0 && from !== "" && to !== "" && !errorDate && !errorCount && !errorInn) {
             dispatch(changeBooleanName({ name: "button", value: false }));
         } else {
             dispatch(changeBooleanName({ name: "button", value: true }));

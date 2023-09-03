@@ -1,7 +1,12 @@
 import styled from "styled-components";
 import { changeBoolean } from "../Reducer/appSlice";
 import { useAppDispatch, useAppSelector } from "../Reducer/store";
-
+interface IButton {
+    background?: string;
+    rotate?: string;
+    translate?: string;
+    opacity?: string;
+}
 const Button = styled.button`
     display: flex;
     align-items: center;
@@ -9,20 +14,20 @@ const Button = styled.button`
     flex-direction: column;
     cursor: pointer;
 `;
-const LineTop = styled.div<{ background: string; rotate: string; translate: string }>`
+const LineTop = styled.div<IButton>`
     width: 2rem;
     height: 0.3rem;
-    background:  ${(props) => props.background};
+    background: ${(props) => props.background};
     transform: translate(0, ${(props) => props.translate}) rotate(${(props) => props.rotate});
     transition: all 0.5s ease-in-out;
 `;
-const LineCenter = styled.div<{ background: string; opacity: string }>`
+const LineCenter = styled.div<IButton>`
     width: 2rem;
     height: 0.3rem;
-    background:  ${(props) => props.background};
+    background: ${(props) => props.background};
     opacity: ${(props) => props.opacity};
 `;
-const LineDown = styled.div<{ background: string; rotate: string; translate: string }>`
+const LineDown = styled.div<IButton>`
     width: 2rem;
     height: 0.3rem;
     background: ${(props) => props.background};

@@ -53,7 +53,7 @@ type TypeDataHistogram = {
 type TypeArrSearchHistogram = {
     data: Array<TypeDataHistogram>;
 };
-type TypeItemsObjectSearch = {
+export type TypeItemsObjectSearch = {
     encodedId: string;
     influence: number;
     similarCount: number;
@@ -62,7 +62,7 @@ type TypeMappingArrObject = {
     inn: string;
     entityIds: Array<string>;
 };
-type TypeArrObjectSearch = {
+export type TypeArrObjectSearch = {
     items: Array<TypeItemsObjectSearch>;
     mappings: Array<TypeMappingArrObject>;
 };
@@ -83,6 +83,7 @@ type TypeOkItems = {
     };
     title: {
         text: string;
+        markup: string;
     };
     content: {
         markup: string;
@@ -126,3 +127,61 @@ export type TypeCheckedAction = {
     id: string;
     checkedValue: string;
 };
+export interface IBodyRequestDocument {
+    ids: Array<string>;
+}
+interface IIssueDateInterval {
+    startDate: string; 
+    endDate: string; 
+}
+interface ISearchContext {
+    targetSearchEntitiesContext: ITargetSearchEntitiesContext;
+}
+interface ITargetSearchEntitiesContext {
+    targetSearchEntities: Array<ITargetSearchEntities>;
+    onlyMainRole: boolean;
+    tonality: string;
+    onlyWithRiskFactors: boolean;
+}
+interface ITargetSearchEntities {
+    type: string;
+    inn: string;
+    maxFullness: boolean;
+}
+interface IAttributeFilters {
+    excludeTechNews: boolean;
+    excludeAnnouncements: boolean;
+    excludeDigests: boolean;
+}
+
+export interface IBodyRequesHistogram {
+    issueDateInterval: IIssueDateInterval;
+    searchContext: ISearchContext;
+    attributeFilters: IAttributeFilters;
+    similarMode: string;
+    limit: string;
+    sortType: string;
+    sortDirectionType: string;
+    intervalType: string;
+    histogramTypes: Array<string>;
+}
+
+export interface IRequestHistogram {
+    body: IBodyRequesHistogram;
+    accessToken: string;
+}
+export interface IBodyRequstHistogram {
+    inn: number;
+    limit: number;
+    from: string;
+    to: string;
+    tonality: string;
+}
+export interface IRequestDocument {
+    body: IBodyRequestDocument | null;
+    accessToken: string;
+}
+export interface IRequestLogIn {
+    login: string;
+    password: string;
+}

@@ -1,7 +1,9 @@
-export const handlerRequestDocument = (arr: any, count: number, limit: number) => {
-    const arrBody: any = { ids: [] };
+import { IBodyRequestDocument, TypeArrObjectSearch, TypeItemsObjectSearch } from "../type";
+
+export const handlerRequestDocument = (arr: TypeArrObjectSearch, count: number, limit: number) => {
+    const arrBody: IBodyRequestDocument = { ids: [] };
     if (arr.items.length > count) {
-        arr.items.map((el: any, index: number) => {
+        arr.items.map((el: TypeItemsObjectSearch, index: number) => {
             if (index >= count && index < count + limit) {
                 arrBody.ids.push(el.encodedId);
             }

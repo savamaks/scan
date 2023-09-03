@@ -1,9 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { IRequestDocument } from "../type";
 
 
 export const requestDocument = createAsyncThunk(
     "fetchDocument",
-    async ({body, accessToken}:any) => {
+    async ({body, accessToken}:IRequestDocument) => {
     const res = await fetch("https://gateway.scan-interfax.ru/api/v1/documents", {
         method: "POST",
         headers: {

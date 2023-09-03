@@ -1,7 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { IRequestLogIn } from "../type";
 
 
-export const requestLogin: any = createAsyncThunk("requestApi", async (arg: any) => {
+export const requestLogin = createAsyncThunk("requestApi", async (arg: IRequestLogIn) => {
     const res = await fetch("https://gateway.scan-interfax.ru/api/v1/account/login", {
         method: "POST",
         headers: {

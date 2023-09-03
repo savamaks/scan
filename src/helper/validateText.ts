@@ -1,8 +1,8 @@
 
 
 export const validateText = (str: string) => {
-    const arrOne: any = [];
-    const arrTwo: any = [];
+    const arrOne: Array<number> = [];
+    const arrTwo: Array<number> = [];
     
     const newStr = str.replace(/\&lt\;/gi,'<').replace(/\&gt\;/gi,'>')
     newStr.split("").map((el: any, index: number) => {
@@ -13,9 +13,9 @@ export const validateText = (str: string) => {
         }
     });
     const count = 0;
-    const arrText: any = [];
+    const arrText: Array<string> = [];
 
-    arrTwo.map(( index: number) => {
+    arrTwo.map((_el: number, index: number) => {
         arrText.push(newStr.slice(arrTwo[index] + 1, arrOne[index + 1]));
         count + 2;
     });

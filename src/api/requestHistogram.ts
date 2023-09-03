@@ -1,8 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { IRequestHistogram } from "../type";
+
 
 export const requestHistogram = createAsyncThunk(
     "requestHistogram", 
-async ({body,accessToken}:any) => {
+async ({body,accessToken}:IRequestHistogram) => {
     const res = await fetch("https://gateway.scan-interfax.ru/api/v1/objectsearch/histograms", {
         method: "POST",
         headers: {

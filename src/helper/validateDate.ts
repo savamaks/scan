@@ -1,7 +1,8 @@
 export const validateDate = (from: string, to: string) => {
-    const fromNumber = +from.split("-").join("");
-    const toNumber = +to.split("-").join("");
-    if (toNumber < fromNumber) {
+    const fromDate = Date.parse(from);
+    const toDate = Date.parse(to);
+    const nowDate = Date.now();
+    if (toDate < fromDate || nowDate <= toDate) {
         return true;
     } else {
         return false;

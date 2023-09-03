@@ -1,4 +1,6 @@
-export const handlerRequestHistogram = ({ inn, limit, from, to,tonality }: any) => {
+import { IBodyRequstHistogram } from "../type";
+
+export const handlerRequestHistogram = ({ inn, limit, from, to, tonality }: IBodyRequstHistogram) => {
     // console.log(inn, limit, from, to, checkedArr);
     const requestBody = {
         issueDateInterval: {
@@ -10,46 +12,24 @@ export const handlerRequestHistogram = ({ inn, limit, from, to,tonality }: any) 
                 targetSearchEntities: [
                     {
                         type: "company",
-                        sparkId: null,
-                        entityId: null,
-                        inn: `${ inn }`, //7710137066
+
+                        inn: `${inn}`, //7710137066
                         maxFullness: true,
-                        inBusinessNews: null,
                     },
                 ],
                 onlyMainRole: true,
                 tonality: `${tonality}`,
                 onlyWithRiskFactors: false,
-                riskFactors: {
-                    and: [],
-                    or: [],
-                    not: [],
-                },
-                themes: {
-                    and: [],
-                    or: [],
-                    not: [],
-                },
-            },
-            themesFilter: {
-                and: [],
-                or: [],
-                not: [],
             },
         },
-        searchArea: {
-            includedSources: [],
-            excludedSources: [],
-            includedSourceGroups: [],
-            excludedSourceGroups: [],
-        },
+
         attributeFilters: {
             excludeTechNews: true,
             excludeAnnouncements: true,
             excludeDigests: true,
         },
         similarMode: "duplicates",
-        limit: `${ limit }`,
+        limit: `${limit}`,
         sortType: "sourceInfluence",
         sortDirectionType: "desc",
         intervalType: "month",
