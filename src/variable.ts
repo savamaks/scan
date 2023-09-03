@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import { css } from "styled-components";
 
 export const FontSize = css`
     font-size: 14px;
@@ -6,7 +6,6 @@ export const FontSize = css`
 
 export const Variable = {
     fontSize: {
-        primary: "14px;"
-    
+        primary: "14px;",
     },
 };

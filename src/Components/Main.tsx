@@ -6,7 +6,8 @@ import SearchPage from "./page/SearchPage";
 import MenuBurger from "./MenuBurger";
 import { useAppSelector } from "../Reducer/store";
 import ResultPage from "./page/ResultPage";
-import Proba from "./page/proba";
+// import Proba from "./page/proba";
+// import ProbaSlider from "./page/probaSlide";
 
 const MainContainer = styled.main`
     grid-area: main;
@@ -24,7 +25,8 @@ const Main = () => {
                 <Route path="/auth" Component={Authorization} />
                 <Route path="/search" Component={SearchPage} />
                 <Route path="/result" Component={ResultPage} />
-                <Route path="/proba" Component={Proba} />
+                {/* <Route path="/proba" Component={Proba} />
+                <Route path="/probaslider" Component={ProbaSlider} /> */}
             </Routes>
         </MainContainer>
     );
