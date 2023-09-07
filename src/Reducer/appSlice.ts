@@ -15,7 +15,7 @@ const initialState: TypeInitialState = {
     buttonLoadMoreActive: true,
     activePlan: "beginner",
     countSlider: 5,
-    eventFiltersInfo: {},
+    eventFiltersInfo: { usedCompanyCount: "", companyLimit: "" },
     checkedArr: [],
     arrSearchHistogram: { data: [] },
     arrObjectSearch: { items: [], mappings: [{ inn: "", entityIds: [] }] },
@@ -50,14 +50,16 @@ const appSlice = createSlice({
             state.countSlider = action.payload;
         },
         removeToken(state: any) {
+            state.loadingLogIn = "";
+            state.loadingInfo = "";
+            state.loadingHistogram = "";
+            state.loadingDocument = "";
             state.resultLogIn = {
                 accessToken: "",
                 expire: "",
                 errorCode: "",
                 message: "",
             };
-            state.loadingLogIn = "";
-            state.loadingInfo = "";
         },
         changeBooleanName(state: any, action) {
             state[action.payload.name] = action.payload.value;
@@ -88,7 +90,7 @@ const appSlice = createSlice({
         },
         addArrObjectSearch(state, action) {
             state.arrObjectSearch = action.payload;
-        }
+        },
     },
     extraReducers(builder) {
         //requestLogin
@@ -139,21 +141,7 @@ const appSlice = createSlice({
                 state.loadingHistogram = "";
                 state.statusError = "error";
             });
-
-        //arrObjectSearch
-        // builder.addCase(requestObjectSearch.pending, (state) => {
-        //     state.loadingObjectSearch = "loading";
-        //     state.statusError = "";
-        // }),
-        //     builder.addCase(requestObjectSearch.fulfilled, (state, action) => {
-        //         state.loadingObjectSearch = "true";
-        //         state.arrObjectSearch = action.payload;
-        //     }),
-        //     builder.addCase(requestObjectSearch.rejected, (state) => {
-        //         state.loadingObjectSearch = "";
-        //         state.statusError = "error";
-        //     });
-
+            
         //arrDocument
         builder.addCase(requestDocument.pending, (state) => {
             state.loadingDocument = "loading";

@@ -54,7 +54,7 @@ const Box = styled.div`
     align-items: center;
     gap: 7px;
     justify-content: flex-end;
-    @media (max-width:900px) {
+    @media (max-width: 900px) {
         flex-direction: column;
         align-items: flex-start;
     }
@@ -75,7 +75,6 @@ const Header = () => {
             dispatch(requestInfo(resultLogIn.accessToken));
         }
     }, [loadingLogIn]);
-    
     return (
         <HeaderContainer position={activeBurger ? "sticky" : "none"} background={activeBurger ? "#029491" : "#FFF"}>
             <Link to="/">
@@ -85,22 +84,20 @@ const Header = () => {
             {size && <Navigation />}
             {loadingLogIn === "true" && resultLogIn.accessToken !== "" && !activeBurger && (
                 <Container>
-                
-                        {loadingInfo === "true" ? (
-                            <>
-                                <Box>
-                                    <Text>Использовано компаний </Text>
-                                    <CountText color={"#000"}>{eventFiltersInfo.usedCompanyCount}</CountText>
-                                </Box>
-                                <Box>
-                                    <Text>Лимит по компаниям</Text>
-                                    <CountText color={"#8AC540"}>{eventFiltersInfo.companyLimit}</CountText>
-                                </Box>
-                            </>
-                        ) : (
-                            <Loader />
-                        )}
-                  
+                    {loadingInfo === "true" ? (
+                        <>
+                            <Box>
+                                <Text>Использовано компаний </Text>
+                                <CountText color={"#000"}>{eventFiltersInfo.usedCompanyCount}</CountText>
+                            </Box>
+                            <Box>
+                                <Text>Лимит по компаниям</Text>
+                                <CountText color={"#8AC540"}>{eventFiltersInfo.companyLimit }</CountText>
+                            </Box>
+                        </>
+                    ) : (
+                        <Loader />
+                    )}
                 </Container>
             )}
             {!size ? <Burdger /> : <LogIn />}

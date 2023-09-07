@@ -1,17 +1,14 @@
 import styled from "styled-components";
-import { CarouselItemType } from "../type";
 
-const Container = styled.div`
+const Container = styled.div<{width:string}>`
     border-radius: 10px;
     background: #fff;
     box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
+    width:${props=>props.width};
     gap: 12px;
     padding: 18px 18px;
-    width: 100%;
-
-    
 `;
 const Image = styled.img`
     width: 30px;
@@ -27,9 +24,9 @@ const Text = styled.p`
     letter-spacing: 0.18px;
 `;
 
-const CarouselItem = ({ image, text }: CarouselItemType) => {
+const CarouselItem = ({ width,image, text }: any) => {
     return (
-        <Container>
+        <Container width={width}>
             <Image src={image} alt="img" />
             <Text>{text}</Text>
         </Container>

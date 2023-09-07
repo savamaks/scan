@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "../Reducer/store";
 import { Link } from "react-router-dom";
-import { changeBoolean,  removeToken } from "../Reducer/appSlice";
+import { changeBoolean, removeToken } from "../Reducer/appSlice";
 import ButtonCustom from "./ButtonCustom";
 
 const LogInContainer = styled.div`
@@ -42,8 +42,8 @@ const AvaImage = styled.img`
     height: 32px;
     border-radius: 50%;
 `;
-const NameText = styled.h2`
-    color: #000;
+const NameText = styled.h2<{ color: string }>`
+    color: ${(props) => props.color};
     font-family: Inter;
     font-size: 14px;
     font-style: normal;
@@ -51,8 +51,8 @@ const NameText = styled.h2`
     line-height: normal;
     opacity: 0.7;
 `;
-const ButtonExit = styled.button`
-    color: #000;
+const ButtonExit = styled.button<{ color: string }>`
+    color: ${(props) => props.color};
     font-family: Inter;
     font-size: 10px;
     font-style: normal;
@@ -61,7 +61,7 @@ const ButtonExit = styled.button`
     opacity: 0.4;
 `;
 const LogIn = () => {
-    const { resultLogIn , activeBurger } = useAppSelector((state) => state.appSlice);
+    const { resultLogIn, activeBurger } = useAppSelector((state) => state.appSlice);
 
     const dispatch = useAppDispatch();
 
@@ -72,9 +72,9 @@ const LogIn = () => {
     };
 
     const exitButton = () => {
-        dispatch(removeToken())
+        dispatch(removeToken());
     };
-    if (!resultLogIn.accessToken ) {
+    if (!resultLogIn.accessToken) {
         return (
             <LogInContainer>
                 <RegistrationButton>Зарегистрироваться</RegistrationButton>
@@ -93,8 +93,10 @@ const LogIn = () => {
         return (
             <LogInContainer>
                 <Container>
-                    <NameText>Алексей А.</NameText>
-                    <ButtonExit onClick={exitButton}>Выйти</ButtonExit>
+                    <NameText color={activeBurger ? "#fff" : "#000"}>Алексей А.</NameText>
+                    <ButtonExit color={activeBurger ? "#fff" : "#000"} onClick={exitButton}>
+                        Выйти
+                    </ButtonExit>
                 </Container>
                 <AvaImage src={"images/ava.png"} alt="Ava" />
             </LogInContainer>

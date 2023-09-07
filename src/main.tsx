@@ -26,12 +26,17 @@ const GlobalStyle = createGlobalStyle`
         url('font/Inter-Regular.ttf') format('truetype');
     
 }
-   *{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+* {
+	padding: 0px;
+	margin: 0px;
+	border: none;
+}
 
-  }
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
   a, a:link, a:visited  {
     text-decoration: none;
   }

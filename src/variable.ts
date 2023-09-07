@@ -6,6 +6,6 @@ export const FontSize = css`
 
 export const Variable = {
     fontSize: {
-        primary: "14px;",
+        primary: "14px",
     },
 };

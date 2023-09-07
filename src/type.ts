@@ -39,14 +39,14 @@ export type TypeResult = {
     message?: string;
 };
 export type TypeEventFiltersInfo = {
-    usedCompanyCount?: string;
-    companyLimit?: string;
+    usedCompanyCount: string;
+    companyLimit: string;
 };
 export type TypeData = {
     date: string;
     value: number;
 };
-type TypeDataHistogram = {
+export type TypeDataHistogram = {
     data: Array<TypeData>;
     histogramType: string;
 };

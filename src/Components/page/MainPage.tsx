@@ -1,18 +1,14 @@
 import styled from "styled-components";
 import { arrCarousel } from "../../fakeData";
-import CarouselItem from "../CarouselItem";
 import { useResize } from "../../Hooks/useResize";
 import Rate from "../Rate";
 import { Link } from "react-router-dom";
-import SliderItem from "../CarouselFolder/SliderItem";
-import Slider from "../CarouselFolder/Slider";
-import ArrowLeft from "../CarouselFolder/ArrowLeft";
-import ArrowRight from "../CarouselFolder/ArrowRight";
 import { useAppDispatch, useAppSelector } from "../../Reducer/store";
 import ButtonCustom from "../ButtonCustom";
 import { useEffect } from "react";
 import { sessionCheck } from "../../helper/sessionCheck";
 import { removeToken } from "../../Reducer/appSlice";
+import ProbaSlider from "../probaSlider";
 
 const ContainerMain = styled.div`
     padding: 0 14px;
@@ -97,6 +93,7 @@ const MainPage = () => {
             }
         }
     }, []);
+    console.log('mainpage');
     return (
         <ContainerMain>
             <Block>
@@ -114,19 +111,7 @@ const MainPage = () => {
 
             <TitleText>Почему именно мы</TitleText>
             <BoxCarousel>
-                <Slider lengthArr={arrCarousel.length} count={size ? 3 : 1}>
-                    <ArrowLeft>
-                        <img src={"images/leftArrow.svg"} alt="arrow-left" />
-                    </ArrowLeft>
-                    <SliderItem>
-                        {arrCarousel.map((el: any, index: number) => {
-                            return <CarouselItem key={index} image={el.image} text={el.text} />;
-                        })}
-                    </SliderItem>
-                    <ArrowRight>
-                        <img src={"images/rightArrow.svg"} alt="arrow-left" />
-                    </ArrowRight>
-                </Slider>
+                <ProbaSlider arr={arrCarousel}/>
             </BoxCarousel>
             <Image src={size ? "images/group-14.svg" : "images/group-14small.svg"} alt="img" />
 
