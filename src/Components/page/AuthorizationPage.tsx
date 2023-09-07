@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "../../Reducer/store";
-import { changeBoolean } from "../../Reducer/appSlice";
+import { changeBoolean, removeToken } from "../../Reducer/appSlice";
 import { useEffect, useState } from "react";
 import { useResize } from "../../Hooks/useResize";
 import ButtonCustom from "../ButtonCustom";
@@ -193,6 +193,7 @@ const Authorization = () => {
         e.preventDefault();
 
         if (valueLogin === "" || password === "") return;
+        dispatch(removeToken());
         dispatch(requestLogin({ login: valueLogin, password }));
         setValueLogin("");
         setPassword("");

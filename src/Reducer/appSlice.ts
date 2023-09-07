@@ -141,7 +141,7 @@ const appSlice = createSlice({
                 state.loadingHistogram = "";
                 state.statusError = "error";
             });
-            
+
         //arrDocument
         builder.addCase(requestDocument.pending, (state) => {
             state.loadingDocument = "loading";
