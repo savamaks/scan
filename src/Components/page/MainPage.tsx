@@ -8,7 +8,7 @@ import ButtonCustom from "../ButtonCustom";
 import { useEffect } from "react";
 import { sessionCheck } from "../../helper/sessionCheck";
 import { removeToken } from "../../Reducer/appSlice";
-import ProbaSlider from "../probaSlider";
+import Slider from "../Slider";
 
 const ContainerMain = styled.div`
     padding: 0 14px;
@@ -111,7 +111,7 @@ const MainPage = () => {
 
             <TitleText>Почему именно мы</TitleText>
             <BoxCarousel>
-                <ProbaSlider arr={arrCarousel}/>
+                <Slider arr={arrCarousel}/>
             </BoxCarousel>
             <Image src={size ? "images/group-14.svg" : "images/group-14small.svg"} alt="img" />
 

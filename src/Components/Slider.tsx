@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useResize } from "../Hooks/useResize";
 import CarouselItem from "./CarouselItem";
 
-const Slider = styled.div<{ width: string }>`
+const SliderBox = styled.div<{ width: string }>`
     display: flex;
     align-items: center;
     width: ${(porps) => porps.width};
@@ -37,7 +37,7 @@ const Con = styled.div<IComent>`
 
 const Button = styled.button``;
 
-const ProbaSlider = ({ arr }: any) => {
+const Slider = ({ arr }: any) => {
     const { width, size } = useResize();
     const [left, setLeft] = useState(0);
     const [countSlide, setCountSlide] = useState(0);
@@ -74,7 +74,7 @@ const ProbaSlider = ({ arr }: any) => {
         }
     };
     return (
-        <Slider width={widthSlider.toString() + "px"}>
+        <SliderBox width={widthSlider.toString() + "px"}>
             <Button onClick={leftArrow}>
                 <img src={"images/leftArrow.svg"} alt="arrow-left" />
             </Button>
@@ -91,8 +91,8 @@ const ProbaSlider = ({ arr }: any) => {
             <Button onClick={rightArrow}>
                 <img src={"images/rightArrow.svg"} alt="arrow-left" />
             </Button>
-        </Slider>
+        </SliderBox>
     );
 };
 
-export default ProbaSlider;
+export default Slider;
