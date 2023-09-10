@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Burdger from "./Burger";
-import { useAppDispatch, useAppSelector } from "../Reducer/store";
+import {  useAppDispatch, useAppSelector } from "../Reducer/store";
 import Loader from "./Loaders/Loader";
 import { useResize } from "../Hooks/useResize";
 import LogIn from "./LogIn";
@@ -21,6 +21,8 @@ const HeaderContainer = styled.header<{ position: string; background: string }>`
     padding: 0 26px;
     background: ${(props) => props.background};
     z-index: 22;
+    width: 100%;
+    max-width: 1440px;
 `;
 const Logo = styled.img``;
 const Container = styled.div`
@@ -60,9 +62,13 @@ const Box = styled.div`
     }
 `;
 const Header = () => {
-    const { loadingLogIn, loadingInfo, activeBurger, eventFiltersInfo, resultLogIn } = useAppSelector((state) => state.appSlice);
     const dispatch = useAppDispatch();
-
+    const loadingLogIn = useAppSelector((state) => state.appSlice.loadingLogIn);
+    const loadingInfo = useAppSelector((state) => state.appSlice.loadingInfo);
+    const activeBurger = useAppSelector((state) => state.appSlice.activeBurger);
+    const eventFiltersInfo = useAppSelector((state) => state.appSlice.eventFiltersInfo);
+    const resultLogIn = useAppSelector((state) => state.appSlice.resultLogIn);
+    
     const clickLogo = () => {
         if (activeBurger) {
             dispatch(changeBoolean("activeBurger"));
@@ -92,7 +98,7 @@ const Header = () => {
                             </Box>
                             <Box>
                                 <Text>Лимит по компаниям</Text>
-                                <CountText color={"#8AC540"}>{eventFiltersInfo.companyLimit }</CountText>
+                                <CountText color={"#8AC540"}>{eventFiltersInfo.companyLimit}</CountText>
                             </Box>
                         </>
                     ) : (

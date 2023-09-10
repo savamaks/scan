@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useResize } from "../../Hooks/useResize";
 import Loader from "../Loaders/Loader";
 import ButtonCustom from "../ButtonCustom";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../Reducer/store";
 import {
     changeBooleanName,
@@ -139,19 +139,18 @@ const Input = styled.input<{ border: string; shadow: string }>`
     appearance: none; //убрал стрелку
     white-space: nowrap;
 
-    
     &:focus {
         outline: none;
     }
     &::placeholder {
         opacity: 0.4;
     }
-    
 `;
 const Box = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: stretch;
     @media (min-width: 900px) {
         flex-direction: row;
         gap: 20px;
@@ -240,58 +239,74 @@ const InputCheked = styled.input`
 
 const SearchPage = (): JSX.Element => {
     const { size } = useResize();
-    const { loadingLogIn, buttonLoadMoreActive, button, checkedArr, resultLogIn, limitLoadingDocument } = useAppSelector((state) => state.appSlice);
+    const loadingLogIn = useAppSelector((state) => state.appSlice.loadingLogIn);
+    const buttonLoadMoreActive = useAppSelector((state) => state.appSlice.buttonLoadMoreActive);
+    const button = useAppSelector((state) => state.appSlice.button);
+    const checkedArr = useAppSelector((state) => state.appSlice.checkedArr);
+    const resultLogIn = useAppSelector((state) => state.appSlice.resultLogIn);
+    const limitLoadingDocument = useAppSelector((state) => state.appSlice.limitLoadingDocument);
+
+
     const dispatch = useAppDispatch();
 
     const [inn, setInn] = useState<number>(0);
-    const [limit, setLimit] = useState<number >(0);
-    const [from, setFrom] = useState<string>("");
-    const [to, setTo] = useState<string>("");
+    const [limit, setLimit] = useState<number>(0);
+    const [inputFromDate, setFrom] = useState<string>("");
+    const [inputToDate, setInputToDate] = useState<string>("");
     const [flag, setFlag] = useState<boolean>(false);
     const [errorDate, setErrorDate] = useState<boolean>(false);
     const [errorInn, setErrorInn] = useState<boolean>(false);
-    const [errorCount, setCount] = useState<boolean>(false);
+    const [errorCount, setErrorCount] = useState<boolean>(false);
     const [tonality, setTonality] = useState<string>("any");
 
-    const checkedRadio = (e: any) => {
-        if (e.target.checked) {
-            dispatch(addChecked(e.target.parentNode.children[1].textContent));
-        } else {
-            dispatch(removeChecked(e.target.parentNode.children[1].textContent));
+    const checkedRadio = (e: ChangeEvent<HTMLInputElement>) => {
+        const value: string | null | undefined = e.target.parentNode?.children[1].textContent;
+        if (e.target.checked && value !== null && value !== undefined) {
+            dispatch(addChecked(value));
+        } else if (value !== null && value !== undefined) {
+            dispatch(removeChecked(value));
         }
     };
-    const changeINN = (e: any) => {
-        setInn(e.target.value.toString());
+    //ИНН компании
+    const changeINN = (e: ChangeEvent<HTMLInputElement>) => {
+        setInn(+e.target.value);
         setErrorInn(!validateInn(e.target.value.toString()));
     };
-    const changeCountDocument = (e: any) => {
-        setCount(false);
-        setLimit(e.target.value);
-        if (e.target.value > 1000 || e.target.value <= 0) {
-            setCount(true);
+
+    //количество документов
+    const changeCountDocument = (e: ChangeEvent<HTMLInputElement>) => {
+        if (/^\d*$/.test(e.target.value)) {
+            const value = +e.target.value;
+            setErrorCount(false);
+            setLimit(value);
+            if (value > 1000 || value <= 0) {
+                setErrorCount(true);
+            }
+        } else {
+            setErrorCount(true);
         }
     };
     // дата от
-    const changeDateFrom = (e: any) => {
+    const changeDateFrom = (e: ChangeEvent<HTMLInputElement>) => {
         setErrorDate(false);
         setFrom(e.target.value);
-        if (to !== "") {
-            setErrorDate(validateDate(e.target.value, to));
+        if (inputToDate !== "") {
+            setErrorDate(validateDate(e.target.value, inputToDate));
         }
     };
     //дата до
-    const changeDateTo = (e: any) => {
+    const changeDateTo = (e: ChangeEvent<HTMLInputElement>) => {
         setErrorDate(false);
-        setTo(e.target.value);
-        if (from !== "") {
-            setErrorDate(validateDate(from, e.target.value));
+        setInputToDate(e.target.value);
+        if (inputFromDate !== "") {
+            setErrorDate(validateDate(inputFromDate, e.target.value));
         }
     };
 
-    const changeSelect = (e: any) => {
+    const changeSelect = (e: ChangeEvent<HTMLSelectElement>) => {
         setTonality(e.target.value);
     };
-    const searchButton = async (e: any) => {
+    const searchButton = async (e:ChangeEvent<HTMLButtonElement> ) => {
         e.preventDefault();
         setFlag(true);
 
@@ -301,7 +316,7 @@ const SearchPage = (): JSX.Element => {
         }
 
         //создание первого запроса, отправка и сохраниние
-        const requestBody = handlerRequestHistogram({ inn, limit, from, to, tonality });
+        const requestBody = handlerRequestHistogram({ inn, limit, inputFromDate, inputToDate, tonality });
         await dispatch(requestHistogram({ body: requestBody, accessToken: resultLogIn.accessToken }));
         //создание второго запроса, отправка и сохраниние
 
@@ -319,12 +334,12 @@ const SearchPage = (): JSX.Element => {
     };
 
     useEffect(() => {
-        if (inn !== 0 && limit !== 0 && from !== "" && to !== "" && !errorDate && !errorCount && !errorInn) {
+        if (inn !== 0 && limit !== 0 && inputFromDate !== "" && inputToDate !== "" && !errorDate && !errorCount && !errorInn) {
             dispatch(changeBooleanName({ name: "button", value: false }));
         } else {
             dispatch(changeBooleanName({ name: "button", value: true }));
         }
-    }, [inn, limit, from, to]);
+    }, [inn, limit, inputFromDate, inputToDate, errorDate, errorCount, errorInn]);
 
     // очистит все галочки checked при изменении размера на мобильную верстку так как блок с галочками скрывается
     useEffect(() => {
@@ -373,7 +388,7 @@ const SearchPage = (): JSX.Element => {
                             border={errorCount ? "#ff5959" : "#c7c7c7"}
                             onChange={changeCountDocument}
                             placeholder="От 1 до 1000"
-                            type="number"
+                            type="text"
                         />
                         {errorCount && <TextError>Превышен диапазон</TextError>}
                         <TextLabel>Диапазон поиска *</TextLabel>
@@ -402,7 +417,7 @@ const SearchPage = (): JSX.Element => {
                                 <div>
                                     <InputCheked
                                         onChange={checkedRadio}
-                                        checked={checkedArr.includes("Признак максимальной полноты") ? true : false}
+                                        checked={checkedArr.includes("Признак максимальной полноты")}
                                         id="oneChecked"
                                         type="checkbox"
                                     />
@@ -411,7 +426,7 @@ const SearchPage = (): JSX.Element => {
                                 <div>
                                     <InputCheked
                                         onChange={checkedRadio}
-                                        checked={checkedArr.includes("Упоминания в бизнес-контексте") ? true : false}
+                                        checked={checkedArr.includes("Упоминания в бизнес-контексте")}
                                         type="checkbox"
                                         id="twoChecked"
                                     />
@@ -420,7 +435,7 @@ const SearchPage = (): JSX.Element => {
                                 <div>
                                     <InputCheked
                                         onChange={checkedRadio}
-                                        checked={checkedArr.includes("Главная роль в публикации") ? true : false}
+                                        checked={checkedArr.includes("Главная роль в публикации")}
                                         type="checkbox"
                                         id="threeChecked"
                                     />
@@ -429,7 +444,7 @@ const SearchPage = (): JSX.Element => {
                                 <div>
                                     <InputCheked
                                         onChange={checkedRadio}
-                                        checked={checkedArr.includes("Публикации только с риск-факторами") ? true : false}
+                                        checked={checkedArr.includes("Публикации только с риск-факторами")}
                                         type="checkbox"
                                         id="fourChecked"
                                     />
@@ -438,7 +453,7 @@ const SearchPage = (): JSX.Element => {
                                 <div>
                                     <InputCheked
                                         onChange={checkedRadio}
-                                        checked={checkedArr.includes("Включать технические новости рынков") ? true : false}
+                                        checked={checkedArr.includes("Включать технические новости рынков")}
                                         type="checkbox"
                                         id="fiveChecked"
                                     />
@@ -447,7 +462,7 @@ const SearchPage = (): JSX.Element => {
                                 <div>
                                     <InputCheked
                                         onChange={checkedRadio}
-                                        checked={checkedArr.includes("Включать анонсы и календари") ? true : false}
+                                        checked={checkedArr.includes("Включать анонсы и календари")}
                                         type="checkbox"
                                         id="sixChecked"
                                     />
@@ -456,7 +471,7 @@ const SearchPage = (): JSX.Element => {
                                 <div>
                                     <InputCheked
                                         onChange={checkedRadio}
-                                        checked={checkedArr.includes("Включать сводки новостей") ? true : false}
+                                        checked={checkedArr.includes("Включать сводки новостей")}
                                         type="checkbox"
                                         id="sevenChecked"
                                     />

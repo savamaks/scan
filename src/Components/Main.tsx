@@ -13,20 +13,31 @@ const MainContainer = styled.main`
     max-width: 1440px;
 `;
 
+const RoutesEnum = {
+    MAIN: "/",
+    AUTH: "/auth",
+    SEARCH: "/search",
+    RESULT: "/result",
+};
+const routes = [
+    { path: RoutesEnum.MAIN, component: <MainPage /> },
+    { path: RoutesEnum.AUTH, component: <Authorization /> },
+    { path: RoutesEnum.SEARCH, component: <SearchPage /> },
+    { path: RoutesEnum.RESULT, component: <ResultPage /> },
+];
+
 const Main = () => {
-    const { activeBurger } = useAppSelector((state) => state.appSlice);
+    const activeBurger  = useAppSelector((state) => state.appSlice.activeBurger);
     return (
         <MainContainer>
             {activeBurger && <MenuBurger />}
             <Routes>
-                <Route path="/" Component={MainPage} />
-                <Route path="/auth" Component={Authorization} />
-                <Route path="/search" Component={SearchPage} />
-                <Route path="/result" Component={ResultPage} />
+                {routes.map((route, index) => (
+                    <Route key={index} path={route.path} element={route.component} />
+                ))}
             </Routes>
         </MainContainer>
     );
 };
 
 export default Main;
-

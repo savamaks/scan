@@ -83,7 +83,9 @@ const ImageOne = styled.img`
 `;
 const MainPage = () => {
     const { size } = useResize();
-    const { loadingLogIn, resultLogIn } = useAppSelector((state) => state.appSlice);
+    const  loadingLogIn = useAppSelector((state) => state.appSlice.loadingLogIn);
+    const  resultLogIn  = useAppSelector((state) => state.appSlice.resultLogIn);
+
     const dispatch = useAppDispatch();
     useEffect(() => {
         if (loadingLogIn === "true") {
@@ -93,7 +95,6 @@ const MainPage = () => {
             }
         }
     }, []);
-    console.log('mainpage');
     return (
         <ContainerMain>
             <Block>

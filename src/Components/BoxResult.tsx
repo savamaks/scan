@@ -80,7 +80,9 @@ const Block = styled.div`
 
 const BoxResult = () => {
     const { width, size } = useResize(); //ширина окна
-    const { loadingHistogram, arrSearchHistogram } = useAppSelector((state) => state.appSlice);
+    const  loadingHistogram  = useAppSelector((state) => state.appSlice.loadingHistogram);
+    const  arrSearchHistogram  = useAppSelector((state) => state.appSlice.arrSearchHistogram);
+
     if (width > 1440) {
     }
     const countCell = Math.round(width / 127) - 4; //колличество ячеек

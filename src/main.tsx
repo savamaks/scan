@@ -56,10 +56,10 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     display: grid;
     min-height: 100vh;
-    max-width: 1440px;
     grid-template: minmax(55px, auto) 1fr minmax(70px, auto) / 1fr;
     grid-template-areas: "header" "main" "footer";
-
+    justify-items: center;
+    width: 100%;
   }
 
   

@@ -7,6 +7,8 @@ const FooterContainer = styled.footer`
     align-items: center;
     justify-content: space-between;
     padding: 25px 18px;
+    width: 100%;
+    
 `;
 const FooterImage = styled.img``;
 const Container = styled.div``;
@@ -23,7 +25,7 @@ const Text = styled.p<{ margin: string }>`
 const Footer = () => {
     return (
         <FooterContainer>
-            <FooterImage src={'images/logowhite.svg'} alt="footerImage" />
+            <FooterImage src={"images/logowhite.svg"} alt="footerImage" />
             <Container>
                 <Text margin="0">г. Москва, Цветной б-р, 40</Text>
                 <Text margin="0">+7 495 771 21 11</Text>

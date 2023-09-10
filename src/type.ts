@@ -173,8 +173,8 @@ export interface IRequestHistogram {
 export interface IBodyRequstHistogram {
     inn: number;
     limit: number;
-    from: string;
-    to: string;
+    inputFromDate: string;
+    inputToDate: string;
     tonality: string;
 }
 export interface IRequestDocument {

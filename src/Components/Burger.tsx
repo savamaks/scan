@@ -36,7 +36,7 @@ const LineDown = styled.div<IButton>`
 `;
 
 const Burdger = () => {
-    const { activeBurger } = useAppSelector((state) => state.appSlice);
+    const  activeBurger = useAppSelector((state) => state.appSlice.activeBurger);
     const dispatch = useAppDispatch();
 
     const clickBurger = () => {

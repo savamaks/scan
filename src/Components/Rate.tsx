@@ -159,7 +159,8 @@ const CurrentTariff = styled.p`
 `;
 
 const Rate = () => {
-    const { activePlan, loadingLogIn } = useAppSelector((state) => state.appSlice);
+    const  activePlan  = useAppSelector((state) => state.appSlice.activePlan);
+    const  loadingLogIn  = useAppSelector((state) => state.appSlice.loadingLogIn);
 
     return (
         <Container>

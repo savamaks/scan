@@ -25,7 +25,7 @@ const LinkNav = styled.button`
     }
 `;
 const Navigation = () => {
-    const { activeBurger } = useAppSelector((state) => state.appSlice);
+    const  activeBurger  = useAppSelector((state) => state.appSlice.activeBurger);
     const dispatch = useAppDispatch();
     const clickNavLink = () => {
         if (activeBurger) {

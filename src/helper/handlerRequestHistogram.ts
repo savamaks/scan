@@ -1,11 +1,11 @@
 import { IBodyRequstHistogram } from "../type";
 
-export const handlerRequestHistogram = ({ inn, limit, from, to, tonality }: IBodyRequstHistogram) => {
+export const handlerRequestHistogram = ({ inn, limit, inputFromDate, inputToDate, tonality }: IBodyRequstHistogram) => {
     // console.log(inn, limit, from, to, checkedArr);
     const requestBody = {
         issueDateInterval: {
-            startDate: `${from}T00:00:00+03:00`, //"2019-01-01T00:00:00+03:00",
-            endDate: `${to}T23:59:59+03:00`, //"2022-08-31T23:59:59+03:00",
+            startDate: `${inputFromDate}T00:00:00+03:00`, //"2019-01-01T00:00:00+03:00",
+            endDate: `${inputToDate}T23:59:59+03:00`, //"2022-08-31T23:59:59+03:00",
         },
         searchContext: {
             targetSearchEntitiesContext: {

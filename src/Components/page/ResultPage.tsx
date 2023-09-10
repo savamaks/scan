@@ -6,9 +6,9 @@ import { useAppDispatch, useAppSelector } from "../../Reducer/store";
 import { changeBoolean, changeCount, removeToken } from "../../Reducer/appSlice";
 import { requestDocument } from "../../api/requestDocument";
 import { handlerRequestDocument } from "../../helper/handlerRequestDocument";
-import {  Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import Loader from "../Loaders/Loader";
-import { useEffect } from "react";
+import { ChangeEvent, useEffect } from "react";
 import { sessionCheck } from "../../helper/sessionCheck";
 
 const Container = styled.div`
@@ -64,19 +64,6 @@ const Box = styled.div`
     justify-content: center;
     margin: 0 0 57px 0;
 `;
-// const BoxDocumentResult = styled.div`
-//     display: flex;
-//     flex-direction: column;
-//     align-items: center;
-//     justify-content: center;
-//     gap: 34px;
-//     margin: 34px 0 20px;
-//     width: 100%;
-//     @media (min-width: 900px) {
-//         flex-direction: row;
-//         flex-wrap: wrap;
-//     }
-// `;
 
 const Block = styled.div`
     display: flex;
@@ -89,18 +76,17 @@ const Block = styled.div`
 `;
 
 const ResultPage = () => {
-    const {
-        buttonLoadMoreActive,
-        resultLogIn,
-        arrObjectSearch,
-        countLoadingDocument,
-        limitLoadingDocument,
-        loadingDocument,
-        loadingLogIn
-    } = useAppSelector((state) => state.appSlice);
+    const buttonLoadMoreActive = useAppSelector((state) => state.appSlice.buttonLoadMoreActive);
+    const resultLogIn = useAppSelector((state) => state.appSlice.resultLogIn);
+    const arrObjectSearch = useAppSelector((state) => state.appSlice.arrObjectSearch);
+    const countLoadingDocument = useAppSelector((state) => state.appSlice.countLoadingDocument);
+    const limitLoadingDocument = useAppSelector((state) => state.appSlice.limitLoadingDocument);
+    const loadingDocument = useAppSelector((state) => state.appSlice.loadingDocument);
+    const loadingLogIn = useAppSelector((state) => state.appSlice.loadingLogIn);
+
     const dispatch = useAppDispatch();
 
-    const loadMore = async (e: any) => {
+    const loadMore = async (e: ChangeEvent<HTMLButtonElement>) => {
         e.preventDefault();
         const requestBody = handlerRequestDocument(arrObjectSearch, countLoadingDocument, limitLoadingDocument);
 

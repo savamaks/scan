@@ -126,7 +126,7 @@ const BoxDocumentResult = styled.div`
 `;
 const Document = () => {
     const { size } = useResize();
-    const { arrDocument } = useAppSelector((state) => state.appSlice);
+    const arrDocument  = useAppSelector((state) => state.appSlice.arrDocument);
     return (
         <BoxDocumentResult>
             {arrDocument.map((el: TypeItemsArrDocument, index: number) => {

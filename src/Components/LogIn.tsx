@@ -61,7 +61,8 @@ const ButtonExit = styled.button<{ color: string }>`
     opacity: 0.4;
 `;
 const LogIn = () => {
-    const { resultLogIn, activeBurger } = useAppSelector((state) => state.appSlice);
+    const  resultLogIn = useAppSelector((state) => state.appSlice.resultLogIn);
+    const  activeBurger  = useAppSelector((state) => state.appSlice.activeBurger);
 
     const dispatch = useAppDispatch();
 

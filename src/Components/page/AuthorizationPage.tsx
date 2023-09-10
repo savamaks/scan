@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { useAppDispatch, useAppSelector } from "../../Reducer/store";
+import {  useAppDispatch, useAppSelector } from "../../Reducer/store";
 import { changeBoolean, removeToken } from "../../Reducer/appSlice";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useResize } from "../../Hooks/useResize";
 import ButtonCustom from "../ButtonCustom";
 import { requestLogin } from "../../api/requestLogin";
@@ -112,6 +112,7 @@ const Input = styled.input<{ border: string }>`
     border-radius: 5px;
     border: 1px solid #c7c7c7;
     background: #fff;
+    padding-left: 10px;
     box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.05);
     color: #000;
     font-family: Inter;
@@ -160,7 +161,11 @@ const LabelError = styled.label`
 
 const Authorization = () => {
     const SizeWindow = useResize();
-    const { buttonEntry, buttonReq, resultLogIn, loadingLogIn } = useAppSelector((state) => state.appSlice);
+    const buttonEntry = useAppSelector((state) => state.appSlice.buttonEntry);
+    const buttonReq = useAppSelector((state) => state.appSlice.buttonReq);
+    const resultLogIn = useAppSelector((state) => state.appSlice.resultLogIn);
+    const loadingLogIn = useAppSelector((state) => state.appSlice.loadingLogIn);
+
     const dispatch = useAppDispatch();
     const [valueLogin, setValueLogin] = useState("");
     const [password, setPassword] = useState("");
@@ -180,16 +185,16 @@ const Authorization = () => {
         }
     };
 
-    const changeInput = (e: any) => {
+    const changeInput = (e: ChangeEvent<HTMLInputElement>) => {
         setValueLogin(e.target.value);
         setError(false);
     };
-    const changePassword = (e: any) => {
+    const changePassword = (e: ChangeEvent<HTMLInputElement>) => {
         setPassword(e.target.value);
         setError(false);
     };
 
-    const clickEntry = async (e: any) => {
+    const clickEntry = async (e: ChangeEvent<HTMLButtonElement>) => {
         e.preventDefault();
 
         if (valueLogin === "" || password === "") return;
