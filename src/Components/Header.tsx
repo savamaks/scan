@@ -23,6 +23,7 @@ const HeaderContainer = styled.header<{ position: string; background: string }>`
     z-index: 22;
     width: 100%;
     max-width: 1440px;
+    
 `;
 const Logo = styled.img``;
 const Container = styled.div`
