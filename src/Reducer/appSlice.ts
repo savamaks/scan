@@ -3,7 +3,6 @@ import { TypeInitialState } from "../type";
 import { requestHistogram } from "../api/requestHistogram";
 import { requestDocument } from "../api/requestDocument";
 import { requestLogin } from "../api/requestLogin";
-import { requestInfo } from "../api/requstInfo";
 
 const initialState: TypeInitialState = {
     button: true,
@@ -15,7 +14,6 @@ const initialState: TypeInitialState = {
     buttonLoadMoreActive: true,
     activePlan: "beginner",
     countSlider: 5,
-    eventFiltersInfo: { usedCompanyCount: "", companyLimit: "" },
     checkedArr: [],
     arrSearchHistogram: { data: [] },
     arrObjectSearch: { items: [], mappings: [{ inn: "", entityIds: [] }] },
@@ -23,7 +21,6 @@ const initialState: TypeInitialState = {
     countLoadingDocument: 0,
     arrDocument: [],
     loadingLogIn: "",
-    loadingInfo: "",
     loadingHistogram: "",
     loadingDocument: "",
     statusError: "",
@@ -51,7 +48,6 @@ const appSlice = createSlice({
         },
         removeToken(state: any) {
             state.loadingLogIn = "";
-            state.loadingInfo = "";
             state.loadingHistogram = "";
             state.loadingDocument = "";
             state.resultLogIn = {
@@ -111,17 +107,18 @@ const appSlice = createSlice({
             });
 
         //requestInfo
-        builder.addCase(requestInfo.pending, (state) => {
-            state.loadingInfo = "loading";
-        }),
-            builder.addCase(requestInfo.fulfilled, (state, action) => {
-                state.loadingInfo = "true";
-                state.eventFiltersInfo = action.payload.eventFiltersInfo;
-            }),
-            builder.addCase(requestInfo.rejected, (state) => {
-                state.loadingInfo = "";
-                state.statusError = "";
-            });
+        // builder.addCase(requestInfo.pending, (state) => {
+        //     state.loadingInfo = "loading";
+        // }),
+        //     builder.addCase(requestInfo.fulfilled, (state, action) => {
+        //         console.log('object');
+        //         state.loadingInfo = "true";
+        //         state.eventFiltersInfo = action.payload.eventFiltersInfo;
+        //     }),
+        //     builder.addCase(requestInfo.rejected, (state) => {
+        //         state.loadingInfo = "";
+        //         state.statusError = "";
+        //     });
 
         //arrHistogram
         builder.addCase(requestHistogram.pending, (state) => {

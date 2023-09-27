@@ -24,6 +24,7 @@ import { Navigate } from "react-router-dom";
 import { validateDate } from "../../helper/validateDate";
 import { validateInn } from "../../helper/validateInn";
 import { sessionCheck } from "../../helper/sessionCheck";
+import { removeLoadingInfo } from "../../Reducer/eventSlice";
 
 const SearchContainer = styled.div`
     display: flex;
@@ -352,6 +353,8 @@ const SearchPage = (): JSX.Element => {
             const check = sessionCheck(resultLogIn.expire);
             if (check) {
                 dispatch(removeToken());
+                dispatch(removeLoadingInfo())
+
             }
         }
     }, []);

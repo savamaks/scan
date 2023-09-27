@@ -109,7 +109,6 @@ export type TypeInitialState = {
     buttonLoadMoreActive: boolean;
     activePlan: string;
     countSlider: number;
-    eventFiltersInfo: TypeEventFiltersInfo;
     checkedArr: Array<string>;
     arrSearchHistogram: TypeArrSearchHistogram;
     arrObjectSearch: TypeArrObjectSearch;
@@ -121,7 +120,6 @@ export type TypeInitialState = {
     loadingDocument: string;
     loadingLogIn: string;
     resultLogIn: TypeResultLogIn;
-    loadingInfo: string;
 };
 export type TypeCheckedAction = {
     id: string;

@@ -10,6 +10,7 @@ import { Navigate } from "react-router-dom";
 import Loader from "../Loaders/Loader";
 import { ChangeEvent, useEffect } from "react";
 import { sessionCheck } from "../../helper/sessionCheck";
+import { removeLoadingInfo } from "../../Reducer/eventSlice";
 
 const Container = styled.div`
     display: flex;
@@ -104,6 +105,7 @@ const ResultPage = () => {
             const check = sessionCheck(resultLogIn.expire);
             if (check) {
                 dispatch(removeToken());
+                dispatch(removeLoadingInfo())
             }
         }
     }, []);

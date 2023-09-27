@@ -7,6 +7,7 @@ import ButtonCustom from "../ButtonCustom";
 import { requestLogin } from "../../api/requestLogin";
 import { Navigate } from "react-router-dom";
 import Loader from "../Loaders/Loader";
+import { removeLoadingInfo } from "../../Reducer/eventSlice";
 
 const Container = styled.div`
     padding: 31px 14px 80px;
@@ -199,6 +200,7 @@ const Authorization = () => {
 
         if (valueLogin === "" || password === "") return;
         dispatch(removeToken());
+        dispatch(removeLoadingInfo())
         dispatch(requestLogin({ login: valueLogin, password }));
         setValueLogin("");
         setPassword("");

@@ -60,6 +60,11 @@ const LinkWebsait = styled.a`
     line-height: normal;
     letter-spacing: 0.14px;
     text-decoration-line: underline;
+    transition: all 0.1s ease-in;
+    &:hover{
+        color: black;
+        transform: scale(1.01);
+    }
 `;
 const Title = styled.h2`
     color: #000;
@@ -84,12 +89,18 @@ const Label = styled.p`
     background: #ffb64f;
     padding: 4px 12px;
 `;
-const BoxImage = styled.div<{ background: string }>`
+const Image = styled.img`
+    object-fit: cover;
+    transition: all.4s ease-in;
+`;
+const BoxImage = styled.div`
     margin: 18px 0;
     height: 250px;
-    background-image: url(${(props) => props.background});
-    background-position: center center;
-    background-size: cover;
+    width: 100%;
+    overflow: hidden;
+    & ${Image}:hover {
+        transform: scale(1.05);
+    }
 `;
 
 const Text = styled.p`
@@ -126,7 +137,7 @@ const BoxDocumentResult = styled.div`
 `;
 const Document = () => {
     const { size } = useResize();
-    const arrDocument  = useAppSelector((state) => state.appSlice.arrDocument);
+    const arrDocument = useAppSelector((state) => state.appSlice.arrDocument);
     return (
         <BoxDocumentResult>
             {arrDocument.map((el: TypeItemsArrDocument, index: number) => {
@@ -142,14 +153,14 @@ const Document = () => {
                     imgSrc = str.slice(9, indexEnd + 9);
                 }
                 const date = el.ok.issueDate.slice(0, 10);
-
+                console.log(imgSrc);
                 return (
                     <Container key={index}>
                         <BoxLink>
                             <DateText>{date}</DateText>
-                            {imgSrc && (
-                                <LinkWebsait href={imgSrc} target="_blank">
-                                    {size ? imgSrc.slice(0, 40) : imgSrc.slice(0, 30)}...
+                            {el.ok.url && (
+                                <LinkWebsait href={el.ok.url} target="_blank">
+                                    {size ? el.ok.url.slice(0, 40) : el.ok.url.slice(0, 30)}...
                                 </LinkWebsait>
                             )}
                         </BoxLink>
@@ -158,7 +169,11 @@ const Document = () => {
                         {el.ok.attributes.isDigest && <Label>сводки новостей</Label>}
                         {el.ok.attributes.isAnnouncement && <Label>анонсы и события</Label>}
 
-                        {imgSrc && <BoxImage background={imgSrc}></BoxImage>}
+                        {imgSrc && (
+                            <BoxImage>
+                                <Image src={imgSrc} alt="img" />
+                            </BoxImage>
+                        )}
                         <Text>{textDocument.slice(0, 800) + "..."}</Text>
                         <Box>
                             <a href={el.ok.url} target="_blank">

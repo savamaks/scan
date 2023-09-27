@@ -63,12 +63,12 @@ const Box = styled.div`
 `;
 const Header = () => {
     const dispatch = useAppDispatch();
-    const loadingLogIn = useAppSelector((state) => state.appSlice.loadingLogIn);
-    const loadingInfo = useAppSelector((state) => state.appSlice.loadingInfo);
-    const activeBurger = useAppSelector((state) => state.appSlice.activeBurger);
-    const eventFiltersInfo = useAppSelector((state) => state.appSlice.eventFiltersInfo);
     const resultLogIn = useAppSelector((state) => state.appSlice.resultLogIn);
-    
+    const loadingLogIn = useAppSelector((state) => state.appSlice.loadingLogIn);
+    const activeBurger = useAppSelector((state) => state.appSlice.activeBurger);
+    const eventFiltersInfo = useAppSelector((state) => state.eventSlice.eventFiltersInfo);
+    const loadingInfo = useAppSelector((state) => state.eventSlice.loadingInfo);
+
     const clickLogo = () => {
         if (activeBurger) {
             dispatch(changeBoolean("activeBurger"));

@@ -11,11 +11,19 @@ const Container = styled.button`
     border-radius: 5px;
     padding: 18px 10px;
     white-space: nowrap;
+    transition: all 0.1s ease-in;
     &:disabled {
         cursor: no-drop;
     }
     @media (min-width: 900px) {
         font-size: 20px;
+    }
+    &:enabled&:hover {
+        transform: scale(1.03);
+    }
+    &:enabled&:active {
+        transform: scale(0.98);
+        filter: brightness(50%);
     }
 `;
 const ButtonCustom = ({ disabled, style, onClick, children }: any) => {

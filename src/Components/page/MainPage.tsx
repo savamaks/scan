@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { sessionCheck } from "../../helper/sessionCheck";
 import { removeToken } from "../../Reducer/appSlice";
 import Slider from "../Slider";
+import { removeLoadingInfo } from "../../Reducer/eventSlice";
 
 const ContainerMain = styled.div`
     padding: 0 14px;
@@ -92,6 +93,8 @@ const MainPage = () => {
             const check = sessionCheck(resultLogIn.expire);
             if (check) {
                 dispatch(removeToken());
+                dispatch(removeLoadingInfo())
+
             }
         }
     }, []);

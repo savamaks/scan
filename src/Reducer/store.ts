@@ -3,13 +3,14 @@ import appSlice from './appSlice';
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE, persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import eventSlice from "./eventSlice";
 
 const persistConfig = {
     key: "root", //Название ключа в localStorage
     storage,
 };
 
-const rootReducer = combineReducers({ appSlice:appSlice});
+const rootReducer = combineReducers({ appSlice:appSlice,eventSlice:eventSlice});
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
