@@ -7,6 +7,8 @@ import MenuBurger from "./MenuBurger";
 import { useAppSelector } from "../Reducer/store";
 import ResultPage from "./page/ResultPage";
 import Proba from "./page/Proba";
+import { arrDiskUrl } from "../fakeData";
+import FotoDisk from "./FotoDisk";
 
 const MainContainer = styled.main`
     grid-area: main;
@@ -39,6 +41,12 @@ const Main = () => {
                 {routes.map((route, index) => (
                     <Route key={index} path={route.path} element={route.component} />
                 ))}
+                {arrDiskUrl.map((el:any,index:number)=>{
+                    const arrString = el.url.split('/')
+                    const nameUrl = arrString[arrString.length-1]
+                    console.log(nameUrl);
+                    return <Route key={index+254} path={`/${nameUrl}`} element={<FotoDisk arr={el}/>}/>
+                })}
             </Routes>
         </MainContainer>
     );

@@ -1,6 +1,7 @@
 import { useState } from "react";
 const token = "y0_AgAAAAATrPSlAAqJ_AAAAADtVenLDojAyIyhQM6iWIGM3adrhUs5d0w";
-const publicKey = "https://disk.yandex.ru/d/fre2n4o3f0-F1A";
+const publicKey = "https://disk.yandex.ru/d/4Y6zxoNUiyMPPA";
+const r = "https://disk.yandex.ru/d/fre2n4o3f0-F1A";
 
 const requestDisk = async () => {
     try {

@@ -44,3 +44,18 @@ export const arrRate: Array<RateType> = [
         image: "images/bussines.svg",
     },
 ];
+
+export const arrDiskUrl=[
+    {
+        id:1,
+        url:'https://disk.yandex.ru/d/4Y6zxoNUiyMPPA'
+    },
+    {
+        id:2,
+        url:'https://disk.yandex.ru/d/fre2n4o3f0-F1A'
+    },
+    {
+        id:3,
+        url:'https://disk.yandex.ru/d/XWf_vi-Af9cm3A'
+    }
+]
